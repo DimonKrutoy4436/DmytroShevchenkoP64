@@ -64,10 +64,15 @@
     <header class="bg-brandOrange text-white sticky top-0 z-40 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             
-            <!-- Logo "DIMA" (всі білі літери окрім I) -->
+            <!-- Logo "DIMA" (всі білі літери окрім I, з помаранчевою фарбою зверху) -->
             <a href="#" onclick="filterCategory('all')" class="flex items-center space-x-1 group">
                 <span class="text-3xl font-extrabold tracking-wider transition duration-200 group-hover:scale-105 inline-block">
-                    <span class="text-white">D</span><span class="text-slate-900 bg-white px-1.5 py-0.5 rounded shadow-sm mx-0.5">I</span><span class="text-white">MA</span>
+                    <span class="text-white">D</span>
+                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
+                        <span class="w-2 h-1 bg-brandOrange rounded-t-sm mb-0.5"></span>
+                        <span class="text-slate-900 bg-white px-1.5 py-0.5 rounded shadow-sm leading-none">I</span>
+                    </span>
+                    <span class="text-white">MA</span>
                 </span>
             </a>
 
@@ -267,7 +272,12 @@
             <div>
                 <div class="flex items-center space-x-1 mb-4">
                     <span class="text-2xl font-extrabold tracking-wider">
-                        <span class="text-white">D</span><span class="text-slate-900 bg-white px-1.5 py-0.5 rounded shadow-sm mx-0.5">I</span><span class="text-white">MA</span>
+                        <span class="text-white">D</span>
+                        <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
+                            <span class="w-1.5 h-0.5 bg-brandOrange rounded-t-sm mb-0.5"></span>
+                            <span class="text-slate-900 bg-white px-1 py-0.5 rounded shadow-sm leading-none text-xl">I</span>
+                        </span>
+                        <span class="text-white">MA</span>
                     </span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footerAbout">
@@ -334,9 +344,9 @@
         </div>
     </footer>
 
-    <!-- МОДАЛЬНЕ ВІКНО КОШИКА (Cart Drawer) -->
-    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex justify-end transition-opacity">
-        <div class="bg-white w-full max-w-md h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
+    <!-- МОДАЛЬНЕ ВІКНО КОШИКА (Center Modal Popup with Scrollbar & Column Structure) -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200">
             
             <!-- Cart Header -->
             <div class="p-4 bg-brandOrange text-white flex items-center justify-between">
@@ -344,23 +354,23 @@
                     <i class="fa-solid fa-bag-shopping text-lg"></i>
                     <h3 class="font-bold text-lg" data-i18n="cartTitle">Ваш кошик</h3>
                 </div>
-                <button onclick="toggleCartModal()" class="text-white/80 hover:text-white text-xl p-1">
+                <button onclick="toggleCartModal()" class="text-white/80 hover:text-white text-xl p-1 transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Cart Items List -->
-            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Cart Items List Container with Vertical Scrollbar -->
+            <div id="cartItemsContainer" class="p-6 overflow-y-auto space-y-4 flex-1 min-h-[280px] max-h-[450px]">
                 <!-- Cart items rendered dynamically -->
             </div>
 
             <!-- Cart Footer -->
-            <div class="p-4 border-t border-slate-200 bg-slate-50 space-y-3">
+            <div class="p-5 border-t border-slate-200 bg-slate-50 space-y-4">
                 <div class="flex justify-between items-center text-sm">
-                    <span class="text-slate-500" data-i18n="cartTotalLabel">Разом до сплати:</span>
-                    <span id="cartTotalPrice" class="text-xl font-extrabold text-slate-900">₴0</span>
+                    <span class="text-slate-500 font-medium" data-i18n="cartTotalLabel">Разом до сплати:</span>
+                    <span id="cartTotalPrice" class="text-2xl font-extrabold text-slate-900">₴0</span>
                 </div>
-                <button onclick="checkout()" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                <button onclick="checkout()" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-credit-card"></i>
                     <span data-i18n="checkoutBtn">Оформити замовлення</span>
                 </button>
@@ -373,7 +383,7 @@
     <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col md:flex-row">
             
-            <button onclick="closeProductModal()" class="absolute top-3 right-3 z-10 bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center">
+            <button onclick="closeProductModal()" class="absolute top-3 right-3 z-10 bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -903,7 +913,7 @@
 
             if (cart.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-12 text-slate-400">
+                    <div class="text-center py-16 text-slate-400">
                         <i class="fa-solid fa-basket-shopping text-4xl mb-3 opacity-40"></i>
                         <p class="text-sm font-medium">${i18n[currentLang].cartEmpty}</p>
                     </div>
@@ -911,20 +921,32 @@
                 return;
             }
 
-            // Render Cart items WITH SKU
+            /* Render Cart items with SKU column + separate quantity column + separate price column */
             container.innerHTML = cart.map((item, index) => `
-                <div class="flex items-center space-x-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg bg-white">
-                    <div class="flex-1 min-w-0">
-                        <h5 class="font-bold text-xs text-slate-900 truncate">${item.name}</h5>
-                        <p class="text-[10px] text-brandOrange font-mono font-semibold">Арт: ${item.sku}</p>
-                        <p class="text-[11px] text-slate-400">Розмір: <span class="font-bold text-slate-700">${item.size}</span></p>
-                        <p class="text-xs font-extrabold text-slate-900 mt-0.5">₴${item.price}</p>
+                <div class="flex items-center justify-between bg-slate-50 p-3.5 rounded-xl border border-slate-200/70 gap-3">
+                    <!-- Left: Image & Name + SKU -->
+                    <div class="flex items-center space-x-3 min-w-0 flex-1">
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-lg bg-white border border-slate-200 flex-shrink-0">
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-xs text-slate-900 truncate">${item.name}</h5>
+                            <div class="flex items-center space-x-2 mt-0.5">
+                                <span class="text-[10px] text-brandOrange font-mono font-bold bg-orange-50 px-1.5 py-0.5 rounded">Арт: ${item.sku}</span>
+                                <span class="text-[10px] text-slate-500">Розмір: <strong class="text-slate-700">${item.size}</strong></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2 bg-white px-2 py-1 rounded-lg border border-slate-200">
-                        <button onclick="changeQty(${index}, -1)" class="text-slate-500 hover:text-black px-1 font-bold">-</button>
-                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                        <button onclick="changeQty(${index}, 1)" class="text-slate-500 hover:text-black px-1 font-bold">+</button>
+
+                    <!-- Middle: Separate Quantity Column -->
+                    <div class="flex items-center space-x-2 bg-white px-2 py-1 rounded-lg border border-slate-200 flex-shrink-0">
+                        <button onclick="changeQty(${index}, -1)" class="text-slate-500 hover:text-black w-5 h-5 flex items-center justify-center font-bold text-xs">-</button>
+                        <span class="text-xs font-bold w-5 text-center">${item.qty}</span>
+                        <button onclick="changeQty(${index}, 1)" class="text-slate-500 hover:text-black w-5 h-5 flex items-center justify-center font-bold text-xs">+</button>
+                    </div>
+
+                    <!-- Right: Separate Price Column -->
+                    <div class="text-right flex-shrink-0 w-24">
+                        <span class="text-xs font-extrabold text-slate-900">₴${(item.price * item.qty).toLocaleString()}</span>
+                        ${item.qty > 1 ? `<p class="text-[10px] text-slate-400">₴${item.price} / шт</p>` : ''}
                     </div>
                 </div>
             `).join('');
