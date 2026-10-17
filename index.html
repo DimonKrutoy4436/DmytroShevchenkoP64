@@ -4,498 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIMA — Інтернет-магазин одягу (Головна)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brandOrange: '#FF6600',
-                        brandOrangeHover: '#E05C00',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
-        .always-scrollbar-y {
-            overflow-y: scroll !important;
-            scrollbar-width: thin;
-            scrollbar-color: #CBD5E1 #F1F5F9;
-        }
-        .always-scrollbar-y::-webkit-scrollbar { width: 8px; display: block; }
-        .always-scrollbar-y::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
-        .always-scrollbar-y::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-        .carousel-container { scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
-        .carousel-container::-webkit-scrollbar { display: none; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
+<body>
 
-    <!-- ВЕРХНЯ ЧАСТИНА САЙТУ -->
-    <header class="bg-white border-b-2 border-orange-500 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-            
-            <!-- Логотип DIMA (букви білі/сірі, але з помаранчевою I з фарбою зверху) -->
-            <a href="index.html" class="flex items-center space-x-1 group">
-                <span class="text-3xl font-extrabold tracking-wider transition duration-200 group-hover:scale-105 inline-block">
-                    <span class="text-slate-900">D</span>
-                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
-                        <span class="w-2.5 h-1.5 bg-orange-500 rounded-t-sm mb-0.5"></span>
-                        <span class="text-white bg-orange-500 px-1.5 py-0.5 rounded shadow-sm leading-none font-black">I</span>
-                    </span>
-                    <span class="text-slate-900">MA</span>
-                </span>
+    <!-- ВЕРХНЯ ЧАСТИНА (HEADER) -->
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="letter-d">D</span>
+                <span class="letter-i">I</span>
+                <span class="letter-m">M</span>
+                <span class="letter-a">A</span>
             </a>
 
-            <!-- Біла пошукова стрічка -->
-            <div class="flex-1 max-w-xl mx-2 min-w-[240px]">
-                <div class="relative">
-                    <input type="text" id="searchInput" oninput="handleSearch()"
-                        placeholder="Пошук товарів за назвою..."
-                        class="w-full bg-white text-slate-900 border border-slate-200 placeholder-slate-400 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-inner text-sm transition">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400"></i>
-                </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Пошук товарів за назвою...">
+                <button onclick="handleSearch()">🔍</button>
             </div>
 
-            <!-- Права частина: перемикач мов, кошик, профіль, баланс -->
-            <div class="flex items-center space-x-4">
-                <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-semibold">
-                    <button id="langUA" onclick="setLanguage('UA')" class="px-2 py-1 rounded bg-orange-500 text-white shadow-sm transition">UA</button>
-                    <button id="langEN" onclick="setLanguage('EN')" class="px-2 py-1 rounded text-slate-600 hover:text-orange-500 transition">EN</button>
+            <div class="header-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" onclick="setLang('UA')">UA</button> | 
+                    <button class="lang-btn" onclick="setLang('EN')">EN</button>
                 </div>
 
-                <button onclick="toggleCartModal()" class="relative p-2 rounded-full hover:bg-orange-50 text-orange-500 transition" title="Кошик">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
-                </button>
+                <div class="cart-trigger" onclick="openCart()">
+                    🛒 <span class="cart-label">Кошик</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
 
-                <div class="flex items-center space-x-2 bg-slate-50 pl-2 pr-3 py-1 rounded-full border border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Аватар" class="w-8 h-8 rounded-full object-cover border border-orange-500">
-                    <div class="text-xs leading-tight hidden sm:block">
-                        <p class="font-bold text-slate-900">Олександр В.</p>
-                        <p class="text-orange-600 font-semibold">Баланс: <span id="userBalance">₴12,500</span></p>
+                <div class="user-profile">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-info">
+                        <div class="user-name">Олександр</div>
+                        <div class="user-balance">Баланс: <span id="userBalance">$1,250.00</span></div>
                     </div>
                 </div>
             </div>
-
         </div>
     </header>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 flex flex-col md:flex-row gap-6 w-full">
-        
-        <!-- ЛІВА ЧАСТИНА САЙТУ: біле бокове меню з чорними літерами + реклама внизу -->
-        <aside class="w-full md:w-64 flex-shrink-0 flex flex-col gap-6">
-            <!-- Кнопка переходу на другу сторінку (Каталог) -->
-            <a href="catalog.html" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-2xl shadow-md transition flex items-center justify-between text-sm group">
-                <span>ВСІ ТОВАРИ</span>
-                <i class="fa-solid fa-arrow-right transition group-hover:translate-x-1"></i>
-            </a>
+    <!-- ОСНОВНА ЧАСТИНА (ГОЛОВНА СТОРІНКА) -->
+    <div class="main-wrapper">
+        <!-- ЛІВА ЧАСТИНА: БОКОВЕ МЕНЮ ТА РЕКЛАМА -->
+        <aside class="left-sidebar">
+            <!-- Кнопка переходу на другу сторінку -->
+            <a href="catalog.html" class="page-nav-btn">ВСІ ТОВАРИ ➔</a>
 
-            <!-- Біле бокове меню з чорними літерами на верхню половину -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-                <h3 class="text-slate-900 font-bold text-base mb-4 pb-2 border-b border-slate-100 flex items-center justify-between">
-                    <span>Категорії</span>
-                    <i class="fa-solid fa-list-ul text-slate-400 text-sm"></i>
-                </h3>
-                <nav class="space-y-1">
-                    <button onclick="filterCategory('all')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-grip-vertical text-xs mr-2.5 opacity-60"></i>Всі товари</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                    <button onclick="filterCategory('tshirts')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-shirt text-xs mr-2.5 opacity-60"></i>Футболки</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                    <button onclick="filterCategory('hoodies')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-user-ninja text-xs mr-2.5 opacity-60"></i>Худі та Світшоти</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                    <button onclick="filterCategory('jackets')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-vest text-xs mr-2.5 opacity-60"></i>Куртки та Пальта</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                    <button onclick="filterCategory('pants')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-person text-xs mr-2.5 opacity-60"></i>Штани та Джинси</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                    <button onclick="filterCategory('shoes')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-900 hover:bg-orange-50 hover:text-orange-500">
-                        <span><i class="fa-solid fa-shoe-prints text-xs mr-2.5 opacity-60"></i>Взуття</span>
-                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                </nav>
+            <div class="categories-box">
+                <h3>Категорії</h3>
+                <ul>
+                    <li><a href="catalog.html?cat=outerwear">🧥 Верхній одяг</a></li>
+                    <li><a href="catalog.html?cat=everyday">👕 Повсякденний одяг</a></li>
+                    <li><a href="catalog.html?cat=pants">👖 Джинси та Штани</a></li>
+                    <li><a href="catalog.html?cat=shoes">👟 Взуття</a></li>
+                    <li><a href="catalog.html?cat=acc">🎒 Аксесуари</a></li>
+                    <li><a href="catalog.html?cat=sport">🏋️ Спорт та Відпочинок</a></li>
+                </ul>
             </div>
 
-            <!-- Нижня половина лівої частини: реклама з цінами та знижками -->
-            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-orange-950 rounded-2xl p-5 text-white shadow-md relative overflow-hidden flex flex-col justify-between min-h-[220px]">
-                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-orange-500/20 rounded-full blur-xl pointer-events-none"></div>
-                <div>
-                    <span class="inline-block bg-orange-500 text-white text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded mb-2">АКЦІЯ</span>
-                    <h4 class="font-bold text-lg leading-snug">Зимовий Сейл Одягу</h4>
-                    <p class="text-xs text-slate-300 mt-1">Знижки до -60% на теплі зимові комплекти!</p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-slate-700/60">
-                    <div class="flex items-baseline justify-between mb-2">
-                        <span class="text-xs text-slate-400">Ціни від:</span>
-                        <div class="text-right">
-                            <span class="line-through text-xs text-slate-400 mr-1">₴1,800</span>
-                            <span class="text-lg font-extrabold text-orange-400">₴720</span>
-                        </div>
-                    </div>
-                    <button onclick="filterCategory('jackets')" class="w-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold py-2 rounded-xl transition text-center shadow-md">
-                        Переглянути пропозиції
-                    </button>
-                </div>
+            <div class="promo-banner">
+                <div class="promo-tag">АКЦІЯ</div>
+                <div class="promo-title">ЗИМОВИЙ СЕЙЛ!</div>
+                <div class="promo-desc">Знижки до -50% на нову колекцію зимового одягу!</div>
+                <div class="promo-price">Від $29.99</div>
             </div>
         </aside>
 
-        <!-- СЕРЕДНЯ ТА НИЖНЯ ЧАСТИНА САЙТУ -->
-        <main class="flex-1 flex flex-col gap-8 min-w-0">
-            <!-- Середня частина: червоний банер на знижки на новий рік від бокового меню до кінця -->
-            <div class="bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white rounded-2xl p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="z-10 text-center sm:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-yellow-300 mb-2 border border-white/20">
-                        <i class="fa-solid fa-snowflake"></i>
-                        <span>НОВОРІЧНИЙ РАЙ ЗНИЖОК</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight">Новорічні Знижки До -50%!</h2>
-                    <p class="text-sm text-red-100 mt-1 max-w-md">Оновіть свій гардероб святковими новинками за найкращими цінами сезону.</p>
-                </div>
-                <div class="z-10 flex-shrink-0 flex flex-col items-center sm:items-end">
-                    <span class="text-xs text-red-200 mb-1">Промокод: <strong class="text-white underline">DIMA2026</strong></span>
-                    <a href="#discountedSection" class="bg-white text-red-600 font-extrabold px-6 py-2.5 rounded-xl shadow-lg hover:bg-yellow-300 hover:text-red-700 transition text-sm">
-                        До знижок <i class="fa-solid fa-arrow-down ml-1 text-xs"></i>
-                    </a>
-                </div>
+        <!-- СЕРЕДНЯ ТА НИЖНЯ ЧАСТИНА -->
+        <div class="content-area">
+            <!-- ЧЕРВОНИЙ БАНЕР -->
+            <div class="red-banner">
+                <h2>🎄 ЗНИЖКИ НА НОВИЙ РІК! 🎅</h2>
+                <p>Встигніть придбати стильний одяг за вигідними цінами до свят!</p>
             </div>
 
-            <!-- Нижче стрічка з продуктами, які саме по знижці з можливістю натиснути до інформації про них та додавання у кошик -->
-            <section id="discountedSection" class="relative">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-red-600 inline-block"></span>
-                        <span>Товари зі знижкою</span>
-                    </h3>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="scrollCarousel('saleProductsCarousel', -300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
-                        <button onclick="scrollCarousel('saleProductsCarousel', 300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
+            <!-- СТРІЧКА ТОВАРІВ ЗІ ЗНИЖКОЮ -->
+            <section class="products-section">
+                <div class="section-header">
+                    <h2>🔥 Товари зі знижкою</h2>
+                    <div class="slider-controls">
+                        <button onclick="scrollSlider('discountSlider', -300)">⟨</button>
+                        <button onclick="scrollSlider('discountSlider', 300)">⟩</button>
                     </div>
                 </div>
-                <div id="saleProductsCarousel" class="carousel-container flex space-x-5 overflow-x-auto py-2 px-1"></div>
+                <div class="product-slider" id="discountSlider">
+                    <!-- Картки товарів генеруються JavaScript -->
+                </div>
             </section>
 
-            <!-- Нижня частина сайту: нові продукти з можливістю натиснути до інформації про них та додавання у кошик -->
-            <section id="newArrivalsSection" class="pt-4 border-t border-slate-200 relative">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-orange-500 inline-block"></span>
-                        <span>Нові надходження</span>
-                    </h3>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="scrollCarousel('newProductsCarousel', -300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-chevron-left text-xs"></i>
-                        </button>
-                        <button onclick="scrollCarousel('newProductsCarousel', 300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-orange-500 hover:text-white transition shadow-sm flex items-center justify-center">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </button>
+            <!-- СТРІЧКА НОВИХ ТОВАРІВ -->
+            <section class="products-section">
+                <div class="section-header">
+                    <h2>✨ Нові надходження</h2>
+                    <div class="slider-controls">
+                        <button onclick="scrollSlider('newSlider', -300)">⟨</button>
+                        <button onclick="scrollSlider('newSlider', 300)">⟩</button>
                     </div>
                 </div>
-                <div id="newProductsCarousel" class="carousel-container flex space-x-5 overflow-x-auto py-2 px-1"></div>
+                <div class="product-slider" id="newSlider">
+                    <!-- Картки товарів генеруються JavaScript -->
+                </div>
             </section>
-        </main>
+        </div>
     </div>
 
-    <!-- Замість FOOTER додано контактні дані -->
-    <footer class="bg-slate-900 text-slate-300 mt-12 border-t-4 border-orange-500">
-        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-                <span class="text-2xl font-extrabold tracking-wider block mb-4">
-                    <span class="text-white">D</span>
-                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
-                        <span class="w-1.5 h-0.5 bg-orange-500 rounded-t-sm mb-0.5"></span>
-                        <span class="text-slate-900 bg-white px-1 py-0.5 rounded shadow-sm leading-none text-xl">I</span>
-                    </span>
-                    <span class="text-white">MA</span>
-                </span>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Твій ідеальний онлайн-магазин стильного та якісного одягу. Доставка по всій Україні за 1-2 дні.
-                </p>
+    <!-- КОНТАКТНІ ДАНІ (ЗАМІСТЬ FOOTER) -->
+    <footer class="contacts-footer">
+        <div class="contacts-grid">
+            <div class="contact-col">
+                <h3>🏬 Інтернет-магазин DIMA</h3>
+                <p>Твій стиль — твоя впевненість. Найкращий одяг від провідних світових та українських брендів.</p>
             </div>
-
-            <div>
-                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Контактні дані</h4>
-                <ul class="space-y-2.5 text-xs">
-                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-phone text-orange-500"></i><span>+380 (800) 33-88-00</span></li>
-                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-envelope text-orange-500"></i><span>support@dima-shop.ua</span></li>
-                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-location-dot text-orange-500"></i><span>м. Київ, вул. Хрещатик, 24</span></li>
-                </ul>
+            <div class="contact-col">
+                <h3>📞 Контакти</h3>
+                <p>Тел: +380 (44) 123-45-67</p>
+                <p>Email: support@dima-shop.ua</p>
+                <p>Графік: Пн-Нд 09:00 - 21:00</p>
             </div>
-
-            <div>
-                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Покупцям</h4>
-                <ul class="space-y-2 text-xs">
-                    <li><a href="#" class="hover:text-orange-500 transition">Доставка та оплата</a></li>
-                    <li><a href="#" class="hover:text-orange-500 transition">Повернення та обмін</a></li>
-                    <li><a href="#" class="hover:text-orange-500 transition">Таблиця розмірів</a></li>
-                </ul>
+            <div class="contact-col">
+                <h3>📍 Адреса та Доставка</h3>
+                <p>м. Київ, вул. Хрещатик, 15</p>
+                <p>Доставка по всій Україні Новою Поштою та Укрпоштою</p>
             </div>
-
-            <div>
-                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Способи оплати</h4>
-                <div class="flex items-center space-x-3 text-2xl text-slate-400">
-                    <i class="fa-brands fa-cc-visa hover:text-white transition"></i>
-                    <i class="fa-brands fa-cc-mastercard hover:text-white transition"></i>
-                    <i class="fa-brands fa-apple-pay hover:text-white transition"></i>
-                </div>
-            </div>
-        </div>
-        <div class="bg-slate-950 py-4 border-t border-slate-800 text-center text-xs text-slate-500">
-            <p>&copy; 2026 DIMA Clothing Store. Всі права захищені.</p>
         </div>
     </footer>
 
-    <!-- Модальне вікно кошика (з центральним вікном та правою текстовою колонкою) -->
-    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="p-4 bg-orange-500 text-white flex items-center justify-between">
-                <h3 class="font-bold text-lg">Кошик замовлення</h3>
-                <button onclick="toggleCartModal()" class="text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+    <!-- МОДАЛЬНЕ ВІКНО КОШИКА -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <h2>🛒 Ваш кошик</h2>
+                <button class="close-btn" onclick="closeCart()">✕</button>
             </div>
-            <div class="flex flex-col lg:flex-row flex-1 overflow-hidden min-h-[350px]">
-                <div class="lg:w-7/12 border-r border-slate-200 flex flex-col bg-white">
-                    <div class="p-3 bg-slate-50 border-b font-bold text-xs text-slate-600 flex justify-between">
-                        <span>Товари у кошику</span><span id="cartLeftCount">0 шт</span>
-                    </div>
-                    <div id="cartItemsContainer" class="p-4 space-y-3 flex-1 max-h-[420px] always-scrollbar-y"></div>
-                </div>
-                <div class="lg:w-5/12 flex flex-col bg-slate-50">
-                    <div class="p-3 bg-slate-100 border-b font-bold text-xs text-slate-700">Список товарів (Текст)</div>
-                    <div id="cartSummaryTextList" class="p-4 space-y-2 flex-1 max-h-[290px] always-scrollbar-y text-xs"></div>
-                    <div class="p-4 border-t bg-white space-y-3">
-                        <div class="flex justify-between items-center text-sm font-bold">
-                            <span>Разом до сплати:</span><span id="cartTotalPrice" class="text-xl text-slate-900">₴0</span>
+            <div class="cart-columns">
+                <!-- Ліва колонка з фото -->
+                <div class="cart-col-left" id="cartVisualList"></div>
+                <!-- Права колонка без фото (Текстова) -->
+                <div class="cart-col-right">
+                    <h3 style="margin-bottom: 10px; font-size:15px; color:#555;">Специфікація замовлення</h3>
+                    <div id="cartTextList" class="cart-text-list"></div>
+                    <div class="cart-summary-box">
+                        <div class="total-price-row">
+                            <span>Всього:</span>
+                            <span id="cartTotalSum">$0.00</span>
                         </div>
-                        <button onclick="checkout()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl text-xs">Оформити замовлення</button>
+                        <button class="checkout-btn" onclick="checkout()">Оформити замовлення</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Модальне вікно продукту -->
-    <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col md:flex-row">
-            <button onclick="closeProductModal()" class="absolute top-3 right-3 z-10 bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-            <div class="md:w-1/2 bg-slate-100 flex items-center justify-center p-4">
-                <img id="modalProductImg" src="" alt="Товар" class="max-h-72 object-contain rounded-xl">
-            </div>
-            <div class="md:w-1/2 p-6 flex flex-col justify-between overflow-y-auto">
-                <div>
-                    <span id="modalProductCategory" class="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">Category</span>
-                    <h3 id="modalProductTitle" class="text-xl font-bold text-slate-900 mb-2 mt-2">Назва</h3>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <span id="modalProductPrice" class="text-2xl font-extrabold text-slate-900">₴0</span>
-                    </div>
-                    <p id="modalProductDesc" class="text-xs text-slate-600 leading-relaxed mb-4">Опис...</p>
-                </div>
-                <div id="modalActionContainer"></div>
-            </div>
+    <!-- МОДАЛЬНЕ ВІКНО ІНФОРМАЦІЇ ПРО ТОВАР -->
+    <div class="modal-overlay" id="productModal">
+        <div class="product-modal">
+            <button class="close-btn" onclick="closeProductModal()">✕</button>
+            <div class="product-modal-content" id="productModalContent"></div>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center space-x-3 pointer-events-none">
-        <i class="fa-solid fa-circle-check text-green-400 text-lg"></i>
-        <span id="toastMessage" class="text-xs font-medium">Товар додано!</span>
-    </div>
-
-    <script>
-        let currentLang = 'UA';
-        let userBalance = 12500;
-        let cart = [];
-        let activeCategory = 'all';
-
-        const products = [
-            { id: 1, sku: "DM-101", name: "Світшот Oversize 'DIMA Special'", category: "hoodies", price: 1250, oldPrice: 1950, isDiscount: true, image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&q=80&w=600", desc: "М'який та теплий світшот із бавовни." },
-            { id: 2, sku: "DM-102", name: "Зимова Куртка Puffer Red", category: "jackets", price: 2400, oldPrice: 3800, isDiscount: true, image: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=600", desc: "Водонепроникна куртка з еко-пухом." },
-            { id: 3, sku: "DM-103", name: "Джинси Cargo Streetwear", category: "pants", price: 1100, oldPrice: 1650, isDiscount: true, image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=600", desc: "Стильні джинси з кишенями." },
-            { id: 4, sku: "DM-104", name: "Худі 'Winter Fire' Fleece", category: "hoodies", price: 1390, oldPrice: 2100, isDiscount: true, image: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&q=80&w=600", desc: "Флісове тепле худі." },
-            { id: 5, sku: "DM-105", name: "Черевики Leather Boots Black", category: "shoes", price: 2750, oldPrice: 3900, isDiscount: true, image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&q=80&w=600", desc: "Шкіряні зимові черевики." },
-            { id: 6, sku: "DM-201", name: "Футболка Базова White Cotton", category: "tshirts", price: 490, oldPrice: null, isDiscount: false, image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=600", desc: "Базова біла футболка з бавовни." },
-            { id: 7, sku: "DM-202", name: "Худі з капюшоном Orange Flame", category: "hoodies", price: 1450, oldPrice: null, isDiscount: false, image: "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&q=80&w=600", desc: "Помаранчеве яскраве худі." },
-            { id: 8, sku: "DM-203", name: "Кросівки Urban Runner 2026", category: "shoes", price: 2990, oldPrice: null, isDiscount: false, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600", desc: "Легкі міські кросівки." }
-        ];
-
-        function scrollCarousel(containerId, offset) {
-            const container = document.getElementById(containerId);
-            if (container) container.scrollBy({ left: offset, behavior: 'smooth' });
-        }
-
-        function createProductCard(product) {
-            const oldPriceHtml = product.oldPrice ? `<span class="text-xs line-through text-slate-400 mr-2">₴${product.oldPrice}</span>` : '';
-            return `
-                <div class="flex-shrink-0 w-64 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col overflow-hidden group">
-                    <div class="relative bg-slate-100 pt-[100%] overflow-hidden">
-                        <img src="${product.image}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        ${product.isDiscount ? `<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-2 py-1 rounded shadow">SALE</span>` : ''}
-                        <span class="absolute bottom-2 right-2 bg-slate-900/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">Арт: ${product.sku}</span>
-                    </div>
-                    <div class="p-4 flex-1 flex flex-col justify-between">
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm mb-1 truncate">${product.name}</h4>
-                            <div class="flex items-baseline mb-4">${oldPriceHtml}<span class="text-base font-extrabold ${product.isDiscount ? 'text-red-600' : 'text-slate-900'}">₴${product.price}</span></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="openProductModal(${product.id})" class="border border-slate-200 text-slate-700 font-semibold text-xs py-2 rounded-xl transition hover:border-slate-800">Детальніше</button>
-                            <button onclick="addToCart(${product.id})" class="bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs py-2 rounded-xl transition flex items-center justify-center space-x-1">
-                                <i class="fa-solid fa-cart-plus text-xs"></i><span>В кошик</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderProducts() {
-            const saleCarousel = document.getElementById('saleProductsCarousel');
-            const newCarousel = document.getElementById('newProductsCarousel');
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-
-            const filtered = products.filter(p => {
-                const matchesCat = (activeCategory === 'all' || p.category === activeCategory);
-                const matchesSearch = p.name.toLowerCase().includes(query) || p.sku.toLowerCase().includes(query);
-                return matchesCat && matchesSearch;
-            });
-
-            saleCarousel.innerHTML = filtered.filter(p => p.isDiscount).map(createProductCard).join('');
-            newCarousel.innerHTML = filtered.filter(p => !p.isDiscount).map(createProductCard).join('');
-        }
-
-        function filterCategory(cat) { activeCategory = cat; renderProducts(); }
-        function handleSearch() { renderProducts(); }
-        function toggleCartModal() { document.getElementById('cartModal').classList.toggle('hidden'); }
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            const existing = cart.find(item => item.id === productId);
-            if (existing) existing.qty += 1; else cart.push({ ...product, qty: 1 });
-            updateCartUI();
-            showToast("Товар додано до кошика!");
-        }
-
-        function changeQty(index, delta) {
-            cart[index].qty += delta;
-            if (cart[index].qty <= 0) cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const leftContainer = document.getElementById('cartItemsContainer');
-            const rightTextList = document.getElementById('cartSummaryTextList');
-            const badge = document.getElementById('cartBadge');
-            const totalPriceEl = document.getElementById('cartTotalPrice');
-            const leftCountEl = document.getElementById('cartLeftCount');
-
-            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-            if (totalItems > 0) { badge.innerText = totalItems; badge.classList.remove('hidden'); }
-            else { badge.classList.add('hidden'); }
-
-            leftCountEl.innerText = `${totalItems} шт`;
-            totalPriceEl.innerText = `₴${totalPrice.toLocaleString()}`;
-
-            if (cart.length === 0) {
-                leftContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs">Кошик порожній</div>`;
-                rightTextList.innerHTML = `<p class="text-slate-400 text-center py-8 italic text-xs">Кошик порожній</p>`;
-                return;
-            }
-
-            leftContainer.innerHTML = cart.map((item, index) => `
-                <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 gap-2">
-                    <div class="flex items-center space-x-2.5 min-w-0 flex-1">
-                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg bg-white border flex-shrink-0">
-                        <div class="min-w-0">
-                            <h5 class="font-bold text-xs text-slate-900 truncate">${item.name}</h5>
-                            <span class="text-[10px] text-orange-600 font-mono font-bold bg-orange-50 px-1 py-0.5 rounded">Арт: ${item.sku}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-1.5 bg-white px-2 py-0.5 rounded-lg border flex-shrink-0">
-                        <button onclick="changeQty(${index}, -1)" class="text-slate-500 font-bold text-xs w-4">-</button>
-                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                        <button onclick="changeQty(${index}, 1)" class="text-slate-500 font-bold text-xs w-4">+</button>
-                    </div>
-                    <div class="text-right flex-shrink-0 min-w-[65px]">
-                        <span class="text-xs font-extrabold text-slate-900">₴${(item.price * item.qty).toLocaleString()}</span>
-                    </div>
-                </div>
-            `).join('');
-
-            rightTextList.innerHTML = cart.map((item) => `
-                <div class="p-2 bg-white rounded-lg border border-slate-200 flex flex-col gap-1 text-xs">
-                    <div class="flex justify-between items-start gap-2">
-                        <span class="font-bold text-slate-800">${item.name}</span>
-                        <span class="text-orange-600 font-extrabold">₴${(item.price * item.qty).toLocaleString()}</span>
-                    </div>
-                    <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-                        <span>Арт: <strong class="font-mono">${item.sku}</strong></span>
-                        <span>Кількість: <strong>${item.qty} шт</strong></span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function checkout() {
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            if (cart.length === 0) return;
-            if (userBalance < totalPrice) { alert("Недостатньо коштів на балансі!"); return; }
-            userBalance -= totalPrice;
-            document.getElementById('userBalance').innerText = `₴${userBalance.toLocaleString()}`;
-            cart = [];
-            updateCartUI();
-            toggleCartModal();
-            showToast("Замовлення успішно оформлено!");
-        }
-
-        function openProductModal(id) {
-            const product = products.find(p => p.id === id);
-            if (!product) return;
-            document.getElementById('modalProductImg').src = product.image;
-            document.getElementById('modalProductTitle').innerText = product.name;
-            document.getElementById('modalProductCategory').innerText = product.category;
-            document.getElementById('modalProductPrice').innerText = `₴${product.price}`;
-            document.getElementById('modalProductDesc').innerText = product.desc;
-            document.getElementById('modalActionContainer').innerHTML = `
-                <button onclick="addToCart(${product.id}); closeProductModal();" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl transition shadow">
-                    В кошик
-                </button>
-            `;
-            document.getElementById('productModal').classList.remove('hidden');
-        }
-
-        function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('langUA').className = lang === 'UA' ? 'px-2 py-1 rounded bg-orange-500 text-white shadow-sm transition' : 'px-2 py-1 rounded text-slate-600 hover:text-orange-500 transition';
-            document.getElementById('langEN').className = lang === 'EN' ? 'px-2 py-1 rounded bg-orange-500 text-white shadow-sm transition' : 'px-2 py-1 rounded text-slate-600 hover:text-orange-500 transition';
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
-        }
-
-        window.onload = function() { renderProducts(); updateCartUI(); };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -4,199 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIMA — Каталог товарів</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brandOrange: '#FF6600',
-                        brandOrangeHover: '#E05C00',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
-        .always-scrollbar-y {
-            overflow-y: scroll !important;
-            scrollbar-width: thin;
-            scrollbar-color: #CBD5E1 #F1F5F9;
-        }
-        .always-scrollbar-y::-webkit-scrollbar { width: 8px; display: block; }
-        .always-scrollbar-y::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
-        .always-scrollbar-y::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
+<body>
 
-    <!-- ВЕРХНЯ ЧАСТИНА САЙТУ (ідентична) -->
-    <header class="bg-white border-b-2 border-orange-500 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
-            <a href="index.html" class="flex items-center space-x-1 group">
-                <span class="text-3xl font-extrabold tracking-wider transition duration-200 group-hover:scale-105 inline-block">
-                    <span class="text-slate-900">D</span>
-                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
-                        <span class="w-2.5 h-1.5 bg-orange-500 rounded-t-sm mb-0.5"></span>
-                        <span class="text-white bg-orange-500 px-1.5 py-0.5 rounded shadow-sm leading-none font-black">I</span>
-                    </span>
-                    <span class="text-slate-900">MA</span>
-                </span>
+    <!-- ВЕРХНЯ ЧАСТИНА (HEADER) — АНАЛОГІЧНО 1-Й СТОРІНЦІ -->
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="letter-d">D</span>
+                <span class="letter-i">I</span>
+                <span class="letter-m">M</span>
+                <span class="letter-a">A</span>
             </a>
 
-            <div class="flex-1 max-w-xl mx-2 min-w-[240px]">
-                <div class="relative">
-                    <input type="text" id="searchInput" oninput="renderCatalog()"
-                        placeholder="Пошук по каталогу..."
-                        class="w-full bg-white text-slate-900 border border-slate-200 placeholder-slate-400 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-inner text-sm transition">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400"></i>
-                </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Пошук у каталозі..." oninput="renderCatalog()">
+                <button onclick="renderCatalog()">🔍</button>
             </div>
 
-            <div class="flex items-center space-x-4">
-                <button onclick="toggleCartModal()" class="relative p-2 rounded-full hover:bg-orange-50 text-orange-500 transition" title="Кошик">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
-                </button>
+            <div class="header-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" onclick="setLang('UA')">UA</button> | 
+                    <button class="lang-btn" onclick="setLang('EN')">EN</button>
+                </div>
 
-                <div class="flex items-center space-x-2 bg-slate-50 pl-2 pr-3 py-1 rounded-full border border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Аватар" class="w-8 h-8 rounded-full object-cover border border-orange-500">
-                    <div class="text-xs leading-tight hidden sm:block">
-                        <p class="font-bold text-slate-900">Олександр В.</p>
-                        <p class="text-orange-600 font-semibold">Баланс: <span id="userBalance">₴12,500</span></p>
+                <div class="cart-trigger" onclick="openCart()">
+                    🛒 <span class="cart-label">Кошик</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-info">
+                        <div class="user-name">Олександр</div>
+                        <div class="user-balance">Баланс: <span id="userBalance">$1,250.00</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 flex flex-col md:flex-row gap-6 w-full">
-        
-        <!-- ЛІВА ЧАСТИНА САЙТУ (Кнопка ГОЛОВНА, активні фільтри, 3 стовпчики підкатегорій, ціновий слайдер, країна-виробник) -->
-        <aside class="w-full md:w-72 flex-shrink-0 flex flex-col gap-6">
-            <a href="index.html" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl shadow-md transition flex items-center justify-between text-sm group">
-                <i class="fa-solid fa-arrow-left transition group-hover:-translate-x-1"></i>
-                <span>ГОЛОВНА</span>
-            </a>
+    <!-- ОСНОВНА ЧАСТИНА КАТАЛОГУ -->
+    <div class="main-wrapper">
+        <!-- ЛІВА ЧАСТИНА: ФІЛЬТРИ ТА КНОПКА "ГОЛОВНА" -->
+        <aside class="left-sidebar">
+            <!-- Кнопка повернення на головну сторінку -->
+            <a href="index.html" class="page-nav-btn">⇦ ГОЛОВНА</a>
 
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider">Обрані фільтри</h4>
-                    <button onclick="clearAllFilters()" class="text-[10px] text-orange-600 hover:underline font-semibold">Скинути всі</button>
-                </div>
-                <div id="activeFiltersList" class="flex flex-wrap gap-1.5 min-h-[30px] items-center text-xs text-slate-400 italic">
-                    Фільтри не вибрано
+            <!-- ОБРАНІ ФІЛЬТРИ -->
+            <div class="selected-filters-box">
+                <h4>Обрані фільтри:</h4>
+                <div class="filter-chips" id="filterChips">
+                    <span class="no-filters-text">Фільтри не вибрано</span>
                 </div>
             </div>
 
-            <!-- Три окремих стовпчика категорій з трьома підкатегоріями в кожній -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
-                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider border-b pb-2">Категорії одягу</h4>
-                
-                <div>
-                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Верхній одяг</span>
-                    <div class="space-y-1 text-xs text-slate-600 pl-1">
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Куртки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Куртки</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Пальта" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Пальта</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Пуховики" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Пуховики</span></label>
-                    </div>
+            <!-- 3 СТОВПЧИКИ КАТЕГОРІЙ ТА ПІДКАТЕГОРІЙ -->
+            <div class="filter-categories-grid">
+                <div class="filter-col">
+                    <h4>Верхній одяг</h4>
+                    <label><input type="checkbox" value="Куртки" onchange="toggleSubCat('Куртки')"> Куртки</label>
+                    <label><input type="checkbox" value="Пальта" onchange="toggleSubCat('Пальта')"> Пальта</label>
+                    <label><input type="checkbox" value="Пуховики" onchange="toggleSubCat('Пуховики')"> Пуховики</label>
                 </div>
-
-                <div>
-                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Повсякденний одяг</span>
-                    <div class="space-y-1 text-xs text-slate-600 pl-1">
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Худі" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Худі</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Футболки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Футболки</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Джинси" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Джинси</span></label>
-                    </div>
+                <div class="filter-col">
+                    <h4>Повсякденний</h4>
+                    <label><input type="checkbox" value="Худі" onchange="toggleSubCat('Худі')"> Худі</label>
+                    <label><input type="checkbox" value="Футболки" onchange="toggleSubCat('Футболки')"> Футболки</label>
+                    <label><input type="checkbox" value="Джинси" onchange="toggleSubCat('Джинси')"> Джинси</label>
                 </div>
-
-                <div>
-                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Взуття та Аксесуари</span>
-                    <div class="space-y-1 text-xs text-slate-600 pl-1">
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Кросівки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Кросівки</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Черевики" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Черевики</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Сумки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Сумки</span></label>
-                    </div>
+                <div class="filter-col">
+                    <h4>Взуття та Аксесуари</h4>
+                    <label><input type="checkbox" value="Кросівки" onchange="toggleSubCat('Кросівки')"> Кросівки</label>
+                    <label><input type="checkbox" value="Черевики" onchange="toggleSubCat('Черевики')"> Черевики</label>
+                    <label><input type="checkbox" value="Сумки" onchange="toggleSubCat('Сумки')"> Сумки</label>
                 </div>
             </div>
 
-            <!-- Категорія 4 з горизонтальним повзунком регулювання цін -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2">Фільтр за ціною</h4>
-                <div class="space-y-2">
-                    <input type="range" id="priceRange" min="300" max="5000" step="100" value="5000" oninput="updatePriceLabel(this.value); renderCatalog();" class="w-full accent-orange-500">
-                    <div class="flex justify-between text-xs text-slate-500">
-                        <span>₴300</span>
-                        <span id="priceLabel" class="font-bold text-slate-900">До ₴5,000</span>
-                    </div>
+            <!-- КАТЕГОРІЯ 4: ЦІНОВИЙ ПОВЗУНОК -->
+            <div class="price-filter-box">
+                <h4>Ціновий діапазон ($)</h4>
+                <input type="range" id="priceRange" min="10" max="500" value="500" oninput="updatePriceFilter(this.value)">
+                <div class="price-labels">
+                    <span>$10</span>
+                    <span id="priceValue">До $500</span>
                 </div>
             </div>
 
-            <!-- Країна Виробник -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2">Країна Виробник</h4>
-                <div class="space-y-1 text-xs text-slate-600">
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="США" onchange="renderCatalog()" class="rounded text-orange-500"><span>США</span></label>
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Китай" onchange="renderCatalog()" class="rounded text-orange-500"><span>Китай</span></label>
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Італія" onchange="renderCatalog()" class="rounded text-orange-500"><span>Італія</span></label>
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Франція" onchange="renderCatalog()" class="rounded text-orange-500"><span>Франція</span></label>
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Німеччина" onchange="renderCatalog()" class="rounded text-orange-500"><span>Німеччина</span></label>
-                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Україна" onchange="renderCatalog()" class="rounded text-orange-500"><span>Україна</span></label>
-                </div>
+            <!-- КРАЇНА ВИРОБНИК -->
+            <div class="country-filter-box">
+                <h4>Країна виробник</h4>
+                <label><input type="checkbox" value="США" onchange="toggleCountry('США')"> США</label>
+                <label><input type="checkbox" value="Китай" onchange="toggleCountry('Китай')"> Китай</label>
+                <label><input type="checkbox" value="Італія" onchange="toggleCountry('Італія')"> Італія</label>
+                <label><input type="checkbox" value="Франція" onchange="toggleCountry('Франція')"> Франція</label>
+                <label><input type="checkbox" value="Німеччина" onchange="toggleCountry('Німеччина')"> Німеччина</label>
+                <label><input type="checkbox" value="Україна" onchange="toggleCountry('Україна')"> Україна</label>
             </div>
         </aside>
 
-        <!-- ЦЕНТРАЛЬНА ЧАСТИНА САЙТУ: Прямокутник сортування + список карток (5 в ряд) -->
-        <main class="flex-1 flex flex-col gap-4 min-w-0">
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-arrow-down-wide-short text-orange-500"></i>
-                    <span class="font-bold text-xs text-slate-700 uppercase">Сортування товарів:</span>
-                </div>
-                <select id="sortSelect" onchange="renderCatalog()" class="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        <!-- ЦЕНТРАЛЬНА ЧАСТИНА: СОРТУВАННЯ ТА КАРТКИ 5 В РЯД -->
+        <div class="content-area">
+            <!-- ПРЯМОКУТНИК СОРТУВАННЯ -->
+            <div class="sorting-bar">
+                <span class="sort-title">📊 Сортувати товари:</span>
+                <select id="sortSelect" onchange="renderCatalog()">
                     <option value="relevance">За релевантністю</option>
                     <option value="cheap">Від дешевих до дорогих</option>
                     <option value="expensive">Від дорогих до дешевих</option>
                 </select>
             </div>
 
-            <!-- Список карток (5 в ряд), з вертикальною прокруткою вгору та вниз -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 h-[750px] always-scrollbar-y">
-                <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+            <!-- СПИСОК КАРТОК ТО ВАРІВ (5 В РЯД З ВЕРТИКАЛЬНОЮ ПРОКРУТКОЮ) -->
+            <div class="catalog-grid-wrapper">
+                <div class="catalog-grid-5" id="catalogGrid">
+                    <!-- Картки динамічно додаються з файлу script.js -->
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 
-    <!-- КОНТАКТНІ ДАНІ (ЗАМІСТЬ FOOTER) -->
-    <footer class="bg-slate-900 text-slate-300 mt-12 border-t-4 border-orange-500">
-        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
-            <div>
-                <span class="text-2xl font-extrabold tracking-wider block mb-4 text-white">DIMA</span>
-                <p class="text-slate-400">Твій ідеальний онлайн-магазин стильного одягу.</p>
+    <!-- НИЖНЯ ЧАСТИНА (КОНТАКТИ) -->
+    <footer class="contacts-footer">
+        <div class="contacts-grid">
+            <div class="contact-col">
+                <h3>🏬 Інтернет-магазин DIMA</h3>
+                <p>Твій стиль — твоя впевненість. Найкращий одяг від провідних світових та українських брендів.</p>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase">Контакти</h4>
-                <p>+380 (800) 33-88-00</p>
-                <p>support@dima-shop.ua</p>
+            <div class="contact-col">
+                <h3>📞 Контакти</h3>
+                <p>Тел: +380 (44) 123-45-67</p>
+                <p>Email: support@dima-shop.ua</p>
+                <p>Графік: Пн-Нд 09:00 - 21:00</p>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase">Покупцям</h4>
-                <p>Доставка та оплата</p>
-                <p>Повернення товару</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase">Оплата</h4>
-                <div class="flex space-x-2 text-xl"><i class="fa-brands fa-cc-visa"></i><i class="fa-brands fa-cc-mastercard"></i></div>
+            <div class="contact-col">
+                <h3>📍 Адреса та Доставка</h3>
+                <p>м. Київ, вул. Хрещатик, 15</p>
+                <p>Доставка по всій Україні Новою Поштою та Укрпоштою</p>
             </div>
         </div>
     </footer>
 
-    <!-- Модальне вікно кошика -->
-    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="p-4 bg-orange-500 text-white flex items-center justify-between">
-                <h3 class="font-bold text-lg
+    <!-- МОДАЛЬНІ ВІКНА (КОШИК ТА ДЕТАЛІ) -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <h2>🛒 Ваш кошик</h2>
+                <button class="close-btn" onclick="closeCart()">✕</button>
+            </div>
+            <div class="cart-columns">
+                <div class="cart-col-left" id="cartVisualList"></div>
+                <div class="cart-col-right">
+                    <h3 style="margin-bottom: 10px; font-size:15px; color:#555;">Специфікація замовлення</h3>
+                    <div id="cartTextList" class="cart-text-list"></div>
+                    <div class="cart-summary-box">
+                        <div class="total-price-row">
+                            <span>Всього:</span>
+                            <span id="cartTotalSum">$0.00</span>
+                        </div>
+                        <button class="checkout-btn" onclick="checkout()">Оформити замовлення</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="productModal">
+        <div class="product-modal">
+            <button class="close-btn" onclick="closeProductModal()">✕</button>
+            <div class="product-modal-content" id="productModalContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Ініціалізація сторінки каталогу
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog();
+        });
+    </script>
+</body>
+</html>
