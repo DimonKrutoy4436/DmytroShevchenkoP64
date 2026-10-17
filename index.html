@@ -49,8 +49,6 @@
         .always-scrollbar-y::-webkit-scrollbar-thumb:hover {
             background: #94A3B8;
         }
-
-        /* Smooth Horizontal Carousel Scrolling */
         .carousel-container {
             scroll-behavior: smooth;
             -ms-overflow-style: none;
@@ -61,871 +59,265 @@
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
 
-  <!-- TOP HEADER (Identical across pages) -->
-  <header class="bg-gray-950 border-b border-gray-800 sticky top-0 z-40 shadow-xl">
-    <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
-      <!-- Logo -->
-      <a href="#" onclick="navigateTo('home'); return false;" class="text-3xl font-black tracking-wider flex items-center gap-1 group">
-        <span class="text-white">D</span>
-        <span class="text-amber-500 group-hover:scale-110 transition-transform inline-block">I</span>
-        <span class="text-white">MA</span>
-      </a>
-
-      <!-- Search Bar -->
-      <div class="flex-1 max-w-xl relative">
-        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Пошук одягу, взуття, бренду..." class="w-full bg-gray-900 border border-gray-700 rounded-full py-2 pl-10 pr-10 text-sm text-gray-200 focus:outline-none focus:border-amber-500 transition-colors">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
-        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-2.5 text-gray-500 hover:text-white text-xs">
-          <i class="fa-solid fa-circle-xmark"></i>
-        </button>
-      </div>
-
-      <!-- Right Controls -->
-      <div class="flex items-center gap-5">
-        <!-- Language Switcher -->
-        <div class="flex items-center bg-gray-900 rounded-lg p-1 border border-gray-800 text-xs font-semibold">
-          <button id="langUA" onclick="setLang('UA')" class="px-2 py-1 rounded bg-amber-500 text-black font-bold">UA</button>
-          <button id="langEN" onclick="setLang('EN')" class="px-2 py-1 rounded text-gray-400 hover:text-white">EN</button>
-        </div>
-
-        <!-- Cart Button -->
-        <button onclick="toggleCartModal()" class="relative p-2 text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2">
-          <i class="fa-solid fa-cart-shopping text-lg"></i>
-          <span class="hidden sm:inline font-medium text-sm">Кошик</span>
-          <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-black font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center border-2 border-gray-950">0</span>
-        </button>
-
-        <!-- User Profile -->
-        <div class="flex items-center gap-3 pl-3 border-l border-gray-800">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="User Avatar" class="w-9 h-9 rounded-full object-cover ring-2 ring-amber-500/50">
-          <div class="hidden md:block text-xs">
-            <div class="font-bold text-gray-200">Дмитро К.</div>
-            <div class="text-amber-400 font-mono font-medium">Баланс: <span id="userBalance">$1500</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN PAGE CONTENT CONTAINER -->
-  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 py-6">
-
-    <!-- ========================================== -->
-    <!-- PAGE 1: HOME PAGE (ГОЛОВНА СТОРІНКА) -->
-    <!-- ========================================== -->
-    <div id="page1" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- LEFT SIDEBAR -->
-      <aside class="lg:col-span-3 space-y-6">
-        
-        <!-- Navigation Button to Catalog -->
-        <button onclick="navigateTo('catalog')" class="w-full py-3.5 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-extrabold rounded-2xl shadow-lg shadow-amber-500/20 flex items-center justify-between group transition-all transform active:scale-95 border border-amber-400">
-          <span class="flex items-center gap-2.5 text-base tracking-wide">
-            <i class="fa-solid fa-border-all text-lg group-hover:rotate-12 transition-transform"></i>
-            ВСІ ТОВАРИ
-          </span>
-          <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-        </button>
-
-        <!-- Categories List (Positioned below the new button) -->
-        <div class="bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-lg">
-          <h2 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2 flex items-center justify-between">
-            <span>Категорії</span>
-            <i class="fa-solid fa-layer-group text-amber-500"></i>
-          </h2>
-          <nav class="space-y-1">
-            <button onclick="filterMainCategory('Upper')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-shirt w-5 text-gray-500 group-hover:text-amber-400"></i> Верхній одяг</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-            <button onclick="filterMainCategory('Hoodies')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-user-ninja w-5 text-gray-500 group-hover:text-amber-400"></i> Худі та світшоти</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-            <button onclick="filterMainCategory('Tshirts')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-vest w-5 text-gray-500 group-hover:text-amber-400"></i> Футболки</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-            <button onclick="filterMainCategory('Pants')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-[#1e293b] w-5 fa-scissors rotate-90 text-gray-500 group-hover:text-amber-400"></i> Штани та джинси</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-            <button onclick="filterMainCategory('Shoes')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-shoe-prints w-5 text-gray-500 group-hover:text-amber-400"></i> Взуття</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-            <button onclick="filterMainCategory('Accessories')" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-900 text-gray-300 hover:text-amber-400 transition-colors flex items-center justify-between group">
-              <span><i class="fa-solid fa-glasses w-5 text-gray-500 group-hover:text-amber-400"></i> Аксесуари</span>
-              <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
-            </button>
-          </nav>
-        </div>
-
-        <!-- Winter Sale Promo Banner (Moved slightly lower) -->
-        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-sky-500/30 group">
-          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80" alt="Winter Sale" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent p-5 flex flex-col justify-between">
-            <span class="self-start bg-sky-500 text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-full tracking-wider shadow">Зимовий Сейл</span>
-            <div>
-              <h3 class="text-xl font-black text-white leading-tight mb-1">ЗИМОВИЙ РОЗПРОДАЖ</h3>
-              <p class="text-sky-300 text-xs font-medium mb-3">Знижки до -50% на теплий одяг та взуття</p>
-              <button onclick="navigateTo('catalog')" class="w-full py-2 bg-sky-500 hover:bg-sky-400 text-black font-bold rounded-xl text-xs transition-colors">
-                Дивитись акції
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </aside>
-
-      <!-- MAIN / MIDDLE SECTION -->
-      <section class="lg:col-span-9 space-y-8">
-        
-        <!-- Red New Year Banner -->
-        <div class="relative bg-gradient-to-r from-red-700 via-rose-600 to-red-800 rounded-3xl p-6 md:p-8 overflow-hidden shadow-2xl border border-red-500/40">
-          <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none text-9xl font-black text-white">
-            2026
-          </div>
-          <div class="relative z-10 max-w-lg">
-            <div class="inline-flex items-center gap-2 bg-black/30 backdrop-blur-md px-3 py-1 rounded-full text-amber-300 text-xs font-semibold mb-3 border border-amber-400/30">
-              <i class="fa-solid fa-snowflake"></i> Спеціальна Новорічна Пропозиція
-            </div>
-            <h1 class="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight mb-3">
-              НОВОРІЧНИЙ SALE <span class="text-amber-300">-40%</span>
-            </h1>
-            <p class="text-red-100 text-sm md:text-base font-normal mb-6 leading-relaxed">
-              Оновлюйте свій гардероб стильними новинками. Встигніть придбати найкращі позиції за святковими цінами!
-            </p>
-            <div class="flex flex-wrap gap-3">
-              <button onclick="navigateTo('catalog')" class="px-6 py-3 bg-amber-400 hover:bg-amber-300 text-black font-extrabold rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 text-sm">
-                Перейти до знижок
-              </button>
-              <button onclick="scrollToSection('discountedCarousel')" class="px-5 py-3 bg-black/40 hover:bg-black/60 text-white font-medium rounded-xl border border-white/20 transition-all text-sm">
-                Дізнатися більше
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Carousel 1: Discounted Products -->
-        <div id="discountedCarousel" class="space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-fire text-amber-500 text-xl"></i>
-              <h2 class="text-xl font-bold text-white">Товари зі знижкою</h2>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="scrollCarousel('discountedContainer', -300)" class="w-9 h-9 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 hover:text-amber-400 hover:border-amber-500 flex items-center justify-center transition-colors shadow">
-                <i class="fa-solid fa-chevron-left text-xs"></i>
-              </button>
-              <button onclick="scrollCarousel('discountedContainer', 300)" class="w-9 h-9 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 hover:text-amber-400 hover:border-amber-500 flex items-center justify-center transition-colors shadow">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </button>
-            </div>
-          </div>
-
-          <div id="discountedContainer" class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar py-2 px-1">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-
-        <!-- Carousel 2: New Arrivals -->
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-sparkles text-sky-400 text-xl"></i>
-              <h2 class="text-xl font-bold text-white">Нові надходження</h2>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="scrollCarousel('newArrivalsContainer', -300)" class="w-9 h-9 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 hover:text-amber-400 hover:border-amber-500 flex items-center justify-center transition-colors shadow">
-                <i class="fa-solid fa-chevron-left text-xs"></i>
-              </button>
-              <button onclick="scrollCarousel('newArrivalsContainer', 300)" class="w-9 h-9 rounded-xl bg-gray-950 border border-gray-800 text-gray-300 hover:text-amber-400 hover:border-amber-500 flex items-center justify-center transition-colors shadow">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </button>
-            </div>
-          </div>
-
-          <div id="newArrivalsContainer" class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar py-2 px-1">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-
-      </section>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PAGE 2: CATALOG / ALL PRODUCTS (ВСІ ТОВАРИ) -->
-    <!-- ========================================== -->
-    <div id="page2" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- PAGE 2 LEFT SIDEBAR -->
-      <aside class="lg:col-span-3 space-y-5 bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit">
-        
-        <!-- TOP BUTTON: "ГОЛОВНА" (Matches position of Page 1 button) -->
-        <button onclick="navigateTo('home')" class="w-full py-3.5 px-4 bg-gray-900 hover:bg-gray-800 text-amber-400 hover:text-amber-300 font-extrabold rounded-2xl shadow-md border border-amber-500/40 flex items-center justify-between group transition-all transform active:scale-95">
-          <span class="flex items-center gap-2.5 text-base tracking-wide">
-            <i class="fa-solid fa-house text-lg group-hover:-translate-x-1 transition-transform"></i>
-            ГОЛОВНА
-          </span>
-          <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-        </button>
-
-        <!-- Selected Filters Section -->
-        <div class="border-t border-gray-800 pt-4">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Обрані фільтри</h3>
-            <button onclick="resetAllFilters()" class="text-[11px] text-amber-400 hover:underline font-medium">Очистити все</button>
-          </div>
-          <div id="activeFiltersChips" class="flex flex-wrap gap-1.5 min-h-[32px] p-2 bg-gray-900 rounded-xl border border-gray-800/80">
-            <!-- Dynamic Chips -->
-            <span class="text-xs text-gray-500 self-center italic">Немає фільтрів</span>
-          </div>
-        </div>
-
-        <!-- 3 Separate Columns/Blocks of Categories -->
-        <div class="border-t border-gray-800 pt-4 space-y-4">
-          <h3 class="text-xs font-bold text-amber-500 uppercase tracking-wider">Категорії товару</h3>
-          
-          <!-- Column 1: Верхній одяг -->
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2 flex items-center gap-1.5">
-              <i class="fa-solid fa-snowflake text-sky-400 text-xs"></i> Верхній одяг
-            </div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Куртки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Куртки">
-                Куртки
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Пальта')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Пальта">
-                Пальта
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Пуховики')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Пуховики">
-                Пуховики
-              </label>
-            </div>
-          </div>
-
-          <!-- Column 2: Повсякденний одяг -->
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2 flex items-center gap-1.5">
-              <i class="fa-solid fa-shirt text-amber-400 text-xs"></i> Повсякденний одяг
-            </div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Худі')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Худі">
-                Худі
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Футболки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Футболки">
-                Футболки
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Джинси')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Джинси">
-                Джинси
-              </label>
-            </div>
-          </div>
-
-          <!-- Column 3: Взуття та Аксесуари -->
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2 flex items-center gap-1.5">
-              <i class="fa-solid fa-shoe-prints text-emerald-400 text-xs"></i> Взуття та Аксесуари
-            </div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Кросівки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Кросівки">
-                Кросівки
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Черевики')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Черевики">
-                Черевики
-              </label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-                <input type="checkbox" onchange="toggleSubcategory('Сумки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Сумки">
-                Сумки
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 4: Price Range Slider -->
-        <div class="border-t border-gray-800 pt-4 space-y-2">
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-gray-300">Ціновий діапазон</span>
-            <span class="text-amber-400 font-mono font-bold">$<span id="priceValue">500</span></span>
-          </div>
-          <input type="range" id="priceSlider" min="10" max="500" step="10" value="500" oninput="handlePriceSlider(this.value)" class="w-full accent-amber-500 bg-gray-800 rounded-lg h-1.5 cursor-pointer">
-          <div class="flex justify-between text-[11px] text-gray-500 font-mono">
-            <span>$10</span>
-            <span>$500</span>
-          </div>
-        </div>
-
-        <!-- Country of Origin -->
-        <div class="border-t border-gray-800 pt-4 space-y-2">
-          <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Країна Виробник</h3>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('США')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="США">
-              🇺🇸 США
-            </label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('Китай')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Китай">
-              🇨🇳 Китай
-            </label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('Італія')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Італія">
-              🇮🇹 Італія
-            </label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('Франція')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Франція">
-              🇫🇷 Франція
-            </label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('Німеччина')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Німеччина">
-              🇩🇪 Німеччина
-            </label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer">
-              <input type="checkbox" onchange="toggleCountry('Україна')" class="country-checkbox rounded bg-gray-800 border-gray-700 text-amber-500 focus:ring-amber-500" value="Україна">
-              🇺🇦 Україна
-            </label>
-          </div>
-        </div>
-
-      </aside>
-
-      <!-- CENTRAL SECTION: SORTING + 5 CARDS PER ROW GRID -->
-      <section class="lg:col-span-9 space-y-4">
-        
-        <!-- Sorting Bar Rectangle -->
-        <div class="bg-gray-950 border border-gray-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div class="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <span>Знайдено товарів:</span>
-            <span id="catalogCount" class="font-bold text-amber-400 font-mono text-base">0</span>
-          </div>
-          <div class="flex items-center gap-3 w-full sm:w-auto">
-            <span class="text-xs text-gray-400 font-semibold whitespace-nowrap">Сортувати:</span>
-            <select id="sortSelect" onchange="handleSortChange(this.value)" class="bg-gray-900 border border-gray-700 text-gray-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-amber-500 cursor-pointer w-full sm:w-auto">
-              <option value="relevance">За релевантністю</option>
-              <option value="lowToHigh">Від дешевих до дорогих</option>
-              <option value="highToLow">Від дорогих до дешевих</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Scrollable Product Grid (5 per row on desktop) -->
-        <div class="max-h-[85vh] overflow-y-auto pr-1 custom-scrollbar">
-          <div id="catalogGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3.5 pb-6">
-            <!-- Dynamic product cards rendered here -->
-          </div>
-          <!-- Empty State -->
-          <div id="noProductsMessage" class="hidden py-16 text-center space-y-3 bg-gray-950/50 border border-gray-800 rounded-2xl">
-            <i class="fa-solid fa-box-open text-4xl text-gray-600"></i>
-            <p class="text-gray-400 text-sm">За вашими фільтрами товарів не знайдено.</p>
-            <button onclick="resetAllFilters()" class="px-4 py-2 bg-amber-500 text-black font-bold text-xs rounded-xl hover:bg-amber-400">Очистити фільтри</button>
-          </div>
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-  <!-- FOOTER (Identical across pages) -->
-  <footer class="bg-gray-950 border-t border-gray-800 mt-12 py-10 text-gray-400 text-sm">
-    <div class="max-w-[1600px] mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-      <div>
-        <div class="text-2xl font-black text-white mb-3">D<span class="text-amber-500">I</span>MA</div>
-        <p class="text-xs text-gray-500 leading-relaxed">Сучасний онлайн-магазин брендового одягу, взуття та аксесуарів. Працюємо по всій Україні з любов'ю та турботою про ваш стиль.</p>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold text-gray-200 uppercase tracking-wider mb-3">Контакти</h4>
-        <ul class="space-y-2 text-xs">
-          <li><i class="fa-solid fa-phone text-amber-500 w-5"></i> +380 (800) 50-20-10</li>
-          <li><i class="fa-solid fa-envelope text-amber-500 w-5"></i> support@dima-shop.ua</li>
-          <li><i class="fa-solid fa-location-dot text-amber-500 w-5"></i> м. Київ, вул. Хрещатик, 24</li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold text-gray-200 uppercase tracking-wider mb-3">Інформація</h4>
-        <ul class="space-y-2 text-xs">
-          <li><a href="#" class="hover:text-amber-400">Про компанію</a></li>
-          <li><a href="#" class="hover:text-amber-400">Доставка та оплата</a></li>
-          <li><a href="#" class="hover:text-amber-400">Обмін та повернення</a></li>
-          <li><a href="#" class="hover:text-amber-400">Політика конфіденційності</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-xs font-bold text-gray-200 uppercase tracking-wider mb-3">Ми в соцмережах</h4>
-        <div class="flex gap-3 text-lg">
-          <a href="#" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center hover:text-amber-400 hover:border-amber-500"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center hover:text-amber-400 hover:border-amber-500"><i class="fa-brands fa-telegram"></i></a>
-          <a href="#" class="w-9 h-9 rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center hover:text-amber-400 hover:border-amber-500"><i class="fa-brands fa-tiktok"></i></a>
-        </div>
-      </div>
-    </div>
-    <div class="max-w-[1600px] mx-auto px-4 pt-6 border-t border-gray-900 text-center text-xs text-gray-600">
-      &copy; 2026 DIMA Clothing Store. Всі права захищено.
-    </div>
-  </footer>
-
-  <!-- CART MODAL CENTER ALIGNED WITH TWO COLUMNS -->
-  <div id="cartModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-gray-950 border border-gray-800 rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn">
-      
-      <!-- Modal Header -->
-      <div class="p-5 border-b border-gray-800 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-cart-shopping text-amber-500 text-xl"></i>
-          <h2 class="text-xl font-bold text-white">Кошик покупок</h2>
-        </div>
-        <button onclick="toggleCartModal()" class="text-gray-400 hover:text-white p-2">
-          <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-      </div>
-
-      <!-- Modal Body (Two Columns) -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 flex-1 overflow-hidden">
-        
-        <!-- Left Column: Product List with Images/SKU/Qty/Price -->
-        <div class="lg:col-span-7 p-5 overflow-y-auto border-b lg:border-b-0 lg:border-r border-gray-800 max-h-[50vh] lg:max-h-full custom-scrollbar">
-          <div id="cartItemsList" class="space-y-4">
-            <!-- Dynamic Cart Items -->
-          </div>
-          <div id="emptyCartMsg" class="hidden text-center py-12 text-gray-500 space-y-2">
-            <i class="fa-solid fa-cart-arrow-down text-4xl"></i>
-            <p>Ваш кошик порожній.</p>
-          </div>
-        </div>
-
-        <!-- Right Column: Text Summary List with SKU, Qty, Price, Permanent Scrollbar, Total, Checkout -->
-        <div class="lg:col-span-5 p-5 bg-gray-900/40 flex flex-col justify-between">
-          <div class="space-y-4">
-            <h3 class="text-xs font-bold text-amber-500 uppercase tracking-wider">Підсумок замовлення</h3>
+    <header class="bg-brandOrange text-white sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
             
-            <!-- Summary list container with permanent scrollbar -->
-            <div id="cartSummaryList" class="max-h-48 overflow-y-scroll space-y-2 pr-2 border border-gray-800/80 rounded-xl p-3 bg-gray-950 text-xs font-mono custom-scrollbar">
-              <!-- Rendered summary items -->
-            </div>
-          </div>
+            <!-- Logo "DIMA" -->
+            <a href="index.html" class="flex items-center space-x-1 group">
+                <span class="text-3xl font-extrabold tracking-wider transition duration-200 group-hover:scale-105 inline-block">
+                    <span class="text-white">D</span>
+                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
+                        <span class="w-2 h-1 bg-brandOrange rounded-t-sm mb-0.5"></span>
+                        <span class="text-slate-900 bg-white px-1.5 py-0.5 rounded shadow-sm leading-none">I</span>
+                    </span>
+                    <span class="text-white">MA</span>
+                </span>
+            </a>
 
-          <div class="space-y-4 pt-4 border-t border-gray-800">
-            <div class="flex justify-between items-center">
-              <span class="text-sm font-medium text-gray-300">Загальна сума:</span>
-              <span id="cartTotalPrice" class="text-2xl font-black text-amber-400 font-mono">$0</span>
-            </div>
-            <button onclick="checkout()" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-black font-extrabold rounded-xl shadow-lg transition-transform active:scale-95 text-sm uppercase tracking-wider">
-              Оформити замовлення
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-amber-500 text-black px-5 py-3 rounded-2xl font-bold shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50 pointer-events-none">
-    <i class="fa-solid fa-circle-check text-lg"></i>
-    <span id="toastMsg">Товар додано до кошика!</span>
-  </div>
-
-  <!-- JAVASCRIPT APP STATE & LOGIC -->
-  <script>
-    // PRODUCT DATASET
-    const PRODUCTS = [
-      { id: 1, sku: 'DM-1001', name: 'Зимовий Пуховик "Nordic Peak"', subcat: 'Пуховики', mainCat: 'Upper', price: 280, rating: 5, reviews: 48, country: 'Італія', image: 'https://images.unsplash.com/photo-1544923246-77307dd654cb?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 350 },
-      { id: 2, sku: 'DM-1002', name: 'Куртка Шкіряна "Urban Biker"', subcat: 'Куртки', mainCat: 'Upper', price: 210, rating: 4, reviews: 32, country: 'Німеччина', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 3, sku: 'DM-1003', name: 'Пальто Вовняне "Classic Style"', subcat: 'Пальта', mainCat: 'Upper', price: 340, rating: 5, reviews: 19, country: 'Франція', image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 420 },
-      { id: 4, sku: 'DM-1004', name: 'Худі Оверсайз "Street Vibe"', subcat: 'Худі', mainCat: 'Hoodies', price: 85, rating: 5, reviews: 94, country: 'США', image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 110 },
-      { id: 5, sku: 'DM-1005', name: 'Футболка Базова "Minimal Pure"', subcat: 'Футболки', mainCat: 'Tshirts', price: 35, rating: 4, reviews: 120, country: 'Україна', image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 6, sku: 'DM-1006', name: 'Джинси Прямі "Heritage Denim"', subcat: 'Джинси', mainCat: 'Pants', price: 110, rating: 4, reviews: 55, country: 'США', image: 'https://images.unsplash.com/photo-1542272604-780c36856842?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 7, sku: 'DM-1007', name: 'Кросівки "Future Runner X"', subcat: 'Кросівки', mainCat: 'Shoes', price: 165, rating: 5, reviews: 88, country: 'Китай', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 200 },
-      { id: 8, sku: 'DM-1008', name: 'Черевики Шкіряні "Winter Grip"', subcat: 'Черевики', mainCat: 'Shoes', price: 230, rating: 5, reviews: 41, country: 'Німеччина', image: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 9, sku: 'DM-1009', name: 'Сумка Шкіряна "Metro Tote"', subcat: 'Сумки', mainCat: 'Accessories', price: 145, rating: 4, reviews: 27, country: 'Італія', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 180 },
-      { id: 10, sku: 'DM-1010', name: 'Пуховик Короткий "Puffer Neon"', subcat: 'Пуховики', mainCat: 'Upper', price: 250, rating: 5, reviews: 63, country: 'Україна', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 300 },
-      { id: 11, sku: 'DM-1011', name: 'Худі Флісове "Cozy Warmth"', subcat: 'Худі', mainCat: 'Hoodies', price: 95, rating: 4, reviews: 50, country: 'Китай', image: 'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 12, sku: 'DM-1012', name: 'Кросівки Замшеві "Retro Court"', subcat: 'Кросівки', mainCat: 'Shoes', price: 140, rating: 4, reviews: 39, country: 'Франція', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&auto=format&fit=crop&q=80', isDiscounted: false }
-    ];
-
-    // STATE MANAGEMENT
-    let cart = [];
-    let selectedSubcategories = [];
-    let selectedCountries = [];
-    let maxPrice = 500;
-    let sortBy = 'relevance';
-    let searchQuery = '';
-    let currentPage = 'home';
-
-    // INITIALIZATION
-    window.onload = function() {
-      renderHomePageCarousels();
-      renderCatalog();
-    };
-
-    // PAGE NAVIGATION
-    function navigateTo(page) {
-      currentPage = page;
-      const page1 = document.getElementById('page1');
-      const page2 = document.getElementById('page2');
-
-      if (page === 'home') {
-        page1.classList.remove('hidden');
-        page2.classList.add('hidden');
-      } else {
-        page1.classList.add('hidden');
-        page2.classList.remove('hidden');
-        renderCatalog();
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // HOME PAGE CAROUSELS
-    function renderHomePageCarousels() {
-      const discContainer = document.getElementById('discountedContainer');
-      const newContainer = document.getElementById('newArrivalsContainer');
-
-      const discounted = PRODUCTS.filter(p => p.isDiscounted);
-      discContainer.innerHTML = discounted.map(p => createCardHTML(p, false)).join('');
-
-      const newArrivals = PRODUCTS.slice().reverse();
-      newContainer.innerHTML = newArrivals.map(p => createCardHTML(p, false)).join('');
-    }
-
-    function scrollCarousel(containerId, amount) {
-      document.getElementById(containerId).scrollBy({ left: amount, behavior: 'smooth' });
-    }
-
-    // CARD HTML GENERATOR
-    function createCardHTML(p, isGrid = true) {
-      const starsHTML = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
-      return `
-        <div class="bg-gray-950 border border-gray-800 rounded-2xl p-3 flex flex-col justify-between hover:border-amber-500/50 transition-all duration-300 group ${isGrid ? 'w-full' : 'w-56 shrink-0'} shadow-lg">
-          <div class="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">
-            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            ${p.isDiscounted ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow">SALE</span>` : ''}
-            <span class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-gray-300 text-[10px] px-1.5 py-0.5 rounded border border-gray-700">${p.country}</span>
-          </div>
-          <div class="flex-1 flex flex-col justify-between space-y-2">
-            <div>
-              <div class="text-[10px] text-gray-500 font-mono mb-0.5">${p.sku}</div>
-              <h3 class="text-xs font-bold text-gray-100 line-clamp-2 leading-snug group-hover:text-amber-400 transition-colors">${p.name}</h3>
-            </div>
-            <div>
-              <div class="flex items-center gap-1.5 text-xs mb-2">
-                <span class="text-amber-400 text-[11px]">${starsHTML}</span>
-                <span class="text-[10px] text-gray-400">(${p.reviews})</span>
-              </div>
-              <div class="flex items-center justify-between gap-1">
-                <div>
-                  <span class="text-sm font-black text-amber-400 font-mono">$${p.price}</span>
-                  ${p.oldPrice ? `<span class="text-[10px] text-gray-500 line-through font-mono ml-1">$${p.oldPrice}</span>` : ''}
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-xl mx-2 min-w-[240px]">
+                <div class="relative">
+                    <input type="text" id="searchInput" oninput="handleSearch()"
+                        placeholder="Пошук товарів за назвою або артикулом..."
+                        class="w-full bg-white text-slate-900 placeholder-slate-400 pl-10 pr-10 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-inner text-sm transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400"></i>
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-2 text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
                 </div>
-                <button onclick="addToCart(${p.id})" class="p-2 bg-gray-900 hover:bg-amber-500 hover:text-black border border-gray-800 rounded-xl text-xs text-amber-400 transition-all active:scale-95">
-                  <i class="fa-solid fa-cart-plus"></i>
-                </button>
-              </div>
             </div>
-          </div>
+
+            <!-- Right Controls: Languages, Cart, Profile Balance -->
+            <div class="flex items-center space-x-3 sm:space-x-5">
+                <div class="flex bg-orange-700/40 p-1 rounded-lg text-xs font-semibold">
+                    <button id="langUA" onclick="setLanguage('UA')" class="px-2 py-1 rounded bg-white text-brandOrange shadow-sm transition">UA</button>
+                    <button id="langEN" onclick="setLanguage('EN')" class="px-2 py-1 rounded text-white hover:text-orange-200 transition">EN</button>
+                </div>
+
+                <button onclick="toggleCartModal()" class="relative p-2 rounded-full hover:bg-white/10 transition" title="Кошик">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-brandOrange hidden">0</span>
+                </button>
+
+                <div class="flex items-center space-x-2 bg-orange-700/30 pl-2 pr-3 py-1 rounded-full border border-orange-400/30">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Аватар" class="w-8 h-8 rounded-full object-cover border-2 border-white">
+                    <div class="text-xs leading-tight hidden sm:block">
+                        <p class="font-bold text-white">Олександр В.</p>
+                        <p class="text-orange-100 flex items-center space-x-1">
+                            <span data-i18n="balance">Баланс:</span> 
+                            <span id="userBalance" class="font-semibold text-yellow-300">₴12,500</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      `;
-    }
+    </header>
 
-    // CATALOG FILTERING & RENDERING (PAGE 2)
-    function renderCatalog() {
-      let filtered = PRODUCTS.filter(p => {
-        // Price Filter
-        if (p.price > maxPrice) return false;
+    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 flex flex-col md:flex-row gap-6 w-full">
+        
+        <!-- ASIDE LEFT -->
+        <aside class="w-full md:w-64 flex-shrink-0 flex flex-col gap-6">
+            <!-- Кнопка переходу у каталог -->
+            <a href="catalog.html" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-3 px-4 rounded-2xl shadow-md transition flex items-center justify-between text-sm group">
+                <span>ВСІ ТОВАРИ</span>
+                <i class="fa-solid fa-arrow-right transition group-hover:translate-x-1"></i>
+            </a>
 
-        // Subcategory Filter
-        if (selectedSubcategories.length > 0 && !selectedSubcategories.includes(p.subcat)) return false;
+            <!-- Категорії -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <h3 class="text-slate-900 font-bold text-base mb-4 pb-2 border-b border-slate-100 flex items-center justify-between">
+                    <span data-i18n="categoriesTitle">Категорії</span>
+                    <i class="fa-solid fa-list-ul text-slate-400 text-sm"></i>
+                </h3>
+                <nav class="space-y-1">
+                    <button onclick="filterCategory('all')" class="category-btn active w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-grip-vertical text-xs mr-2.5 opacity-60"></i><span data-i18n="catAll">Всі товари</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                    <button onclick="filterCategory('tshirts')" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-shirt text-xs mr-2.5 opacity-60"></i><span data-i18n="catTshirts">Футболки</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                    <button onclick="filterCategory('hoodies')" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-user-ninja text-xs mr-2.5 opacity-60"></i><span data-i18n="catHoodies">Худі та Світшоти</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                    <button onclick="filterCategory('jackets')" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-vest text-xs mr-2.5 opacity-60"></i><span data-i18n="catJackets">Куртки та Пальта</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                    <button onclick="filterCategory('pants')" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-person text-xs mr-2.5 opacity-60"></i><span data-i18n="catPants">Штани та Джинси</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                    <button onclick="filterCategory('shoes')" class="category-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition text-left text-slate-700 hover:bg-orange-50 hover:text-brandOrange">
+                        <span><i class="fa-solid fa-shoe-prints text-xs mr-2.5 opacity-60"></i><span data-i18n="catShoes">Взуття</span></span>
+                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </nav>
+            </div>
 
-        // Country Filter
-        if (selectedCountries.length > 0 && !selectedCountries.includes(p.country)) return false;
+            <!-- Ad Banner -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-orange-950 rounded-2xl p-5 text-white shadow-md relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brandOrange/20 rounded-full blur-xl pointer-events-none"></div>
+                <div>
+                    <span class="inline-block bg-brandOrange text-white text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded mb-2">PROMO</span>
+                    <h4 class="font-bold text-lg leading-snug" data-i18n="adTitle">Зимовий Сейл Одягу</h4>
+                    <p class="text-xs text-slate-300 mt-1" data-i18n="adSub">Знижки до -60% на теплі зимові комплекти!</p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-700/60">
+                    <div class="flex items-baseline justify-between mb-2">
+                        <span class="text-xs text-slate-400" data-i18n="adFrom">Ціни від:</span>
+                        <div class="text-right">
+                            <span class="line-through text-xs text-slate-400 mr-1">₴1,800</span>
+                            <span class="text-lg font-extrabold text-brandOrange">₴720</span>
+                        </div>
+                    </div>
+                    <button onclick="filterCategory('jackets')" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white text-xs font-bold py-2 rounded-xl transition text-center shadow-md shadow-orange-900/30">
+                        <span data-i18n="adBtn">Переглянути пропозиції</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
 
-        // Search Query
-        if (searchQuery.trim() !== '') {
-          const q = searchQuery.toLowerCase();
-          const matchName = p.name.toLowerCase().includes(q);
-          const matchSKU = p.sku.toLowerCase().includes(q);
-          const matchCat = p.subcat.toLowerCase().includes(q);
-          if (!matchName && !matchSKU && !matchCat) return false;
-        }
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 flex flex-col gap-8 min-w-0">
+            <div class="bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white rounded-2xl p-6 sm:p-8 shadow-md relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="z-10 text-center sm:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-yellow-300 mb-2 border border-white/20">
+                        <i class="fa-solid fa-snowflake"></i>
+                        <span data-i18n="bannerTag">НОВОРІЧНИЙ РАЙ ЗНИЖОК</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight" data-i18n="bannerHeadline">Новорічні Знижки До -50%!</h2>
+                    <p class="text-sm text-red-100 mt-1 max-w-md" data-i18n="bannerDesc">Оновіть свій гардероб святковими новинками за найкращими цінами сезону.</p>
+                </div>
+                <div class="z-10 flex-shrink-0 flex flex-col items-center sm:items-end">
+                    <span class="text-xs text-red-200 mb-1" data-i18n="promoCodeText">Промокод: <strong class="text-white underline">DIMA2026</strong></span>
+                    <a href="#discountedSection" class="bg-white text-red-600 font-extrabold px-6 py-2.5 rounded-xl shadow-lg hover:bg-yellow-300 hover:text-red-700 transition transform hover:-translate-y-0.5 text-sm">
+                        <span data-i18n="bannerBtn">До знижок</span> <i class="fa-solid fa-arrow-down ml-1 text-xs"></i>
+                    </a>
+                </div>
+            </div>
 
-        return true;
-      });
+            <section id="discountedSection" class="relative">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-600 inline-block"></span>
+                        <span data-i18n="saleTitle">Товари зі знижкою</span>
+                    </h3>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="scrollCarousel('saleProductsCarousel', -300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-brandOrange hover:text-white transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                        <button onclick="scrollCarousel('saleProductsCarousel', 300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-brandOrange hover:text-white transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="saleProductsCarousel" class="carousel-container flex space-x-5 overflow-x-auto py-2 px-1"></div>
+            </section>
 
-      // Sorting
-      if (sortBy === 'lowToHigh') {
-        filtered.sort((a, b) => a.price - b.price);
-      } else if (sortBy === 'highToLow') {
-        filtered.sort((a, b) => b.price - a.price);
-      }
+            <section id="newArrivalsSection" class="pt-4 border-t border-slate-200 relative">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-brandOrange inline-block"></span>
+                        <span data-i18n="newArrivalsTitle">Нові надходження</span>
+                    </h3>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="scrollCarousel('newProductsCarousel', -300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-brandOrange hover:text-white transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                        </button>
+                        <button onclick="scrollCarousel('newProductsCarousel', 300)" class="w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-700 hover:bg-brandOrange hover:text-white transition shadow-sm flex items-center justify-center">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="newProductsCarousel" class="carousel-container flex space-x-5 overflow-x-auto py-2 px-1"></div>
+            </section>
+        </main>
+    </div>
 
-      // Render Grid
-      const grid = document.getElementById('catalogGrid');
-      const countEl = document.getElementById('catalogCount');
-      const noProds = document.getElementById('noProductsMessage');
-
-      countEl.innerText = filtered.length;
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
-        noProds.classList.remove('hidden');
-      } else {
-        noProds.classList.add('hidden');
-        grid.innerHTML = filtered.map(p => createCardHTML(p, true)).join('');
-      }
-
-      renderActiveFiltersChips();
-    }
-
-    // FILTER HANDLERS
-    function toggleSubcategory(subcat) {
-      if (selectedSubcategories.includes(subcat)) {
-        selectedSubcategories = selectedSubcategories.filter(s => s !== subcat);
-      } else {
-        selectedSubcategories.push(subcat);
-      }
-      renderCatalog();
-    }
-
-    function toggleCountry(country) {
-      if (selectedCountries.includes(country)) {
-        selectedCountries = selectedCountries.filter(c => c !== country);
-      } else {
-        selectedCountries.push(country);
-      }
-      renderCatalog();
-    }
-
-    function handlePriceSlider(val) {
-      maxPrice = parseInt(val);
-      document.getElementById('priceValue').innerText = val;
-      renderCatalog();
-    }
-
-    function handleSortChange(val) {
-      sortBy = val;
-      renderCatalog();
-    }
-
-    function filterMainCategory(catKey) {
-      resetAllFilters();
-      navigateTo('catalog');
-      // Preselect subcategories belonging to this main category
-      const subcats = PRODUCTS.filter(p => p.mainCat === catKey).map(p => p.subcat);
-      selectedSubcategories = [...new Set(subcats)];
-      
-      // Update Checkboxes UI
-      document.querySelectorAll('.subcat-checkbox').forEach(cb => {
-        if (selectedSubcategories.includes(cb.value)) cb.checked = true;
-      });
-
-      renderCatalog();
-    }
-
-    function resetAllFilters() {
-      selectedSubcategories = [];
-      selectedCountries = [];
-      maxPrice = 500;
-      document.getElementById('priceSlider').value = 500;
-      document.getElementById('priceValue').innerText = '500';
-
-      document.querySelectorAll('.subcat-checkbox').forEach(cb => cb.checked = false);
-      document.querySelectorAll('.country-checkbox').forEach(cb => cb.checked = false);
-
-      renderCatalog();
-    }
-
-    function renderActiveFiltersChips() {
-      const container = document.getElementById('activeFiltersChips');
-      let chips = [];
-
-      selectedSubcategories.forEach(s => {
-        chips.push(`
-          <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[11px] px-2 py-0.5 rounded-lg font-medium">
-            ${s} <button onclick="toggleSubcategory('${s}'); uncheckSubcat('${s}');" class="hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-          </span>
-        `);
-      });
-
-      selectedCountries.forEach(c => {
-        chips.push(`
-          <span class="inline-flex items-center gap-1 bg-sky-500/10 text-sky-400 border border-sky-500/30 text-[11px] px-2 py-0.5 rounded-lg font-medium">
-            ${c} <button onclick="toggleCountry('${c}'); uncheckCountry('${c}');" class="hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-          </span>
-        `);
-      });
-
-      if (maxPrice < 500) {
-        chips.push(`
-          <span class="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] px-2 py-0.5 rounded-lg font-medium">
-            До $${maxPrice} <button onclick="handlePriceSlider(500)" class="hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-          </span>
-        `);
-      }
-
-      if (chips.length === 0) {
-        container.innerHTML = `<span class="text-xs text-gray-500 self-center italic">Немає фільтрів</span>`;
-      } else {
-        container.innerHTML = chips.join('');
-      }
-    }
-
-    function uncheckSubcat(val) {
-      document.querySelectorAll('.subcat-checkbox').forEach(cb => {
-        if (cb.value === val) cb.checked = false;
-      });
-    }
-
-    function uncheckCountry(val) {
-      document.querySelectorAll('.country-checkbox').forEach(cb => {
-        if (cb.value === val) cb.checked = false;
-      });
-    }
-
-    // SEARCH
-    function handleSearch(val) {
-      searchQuery = val;
-      const clearBtn = document.getElementById('clearSearchBtn');
-      if (val.length > 0) clearBtn.classList.remove('hidden');
-      else clearBtn.classList.add('hidden');
-
-      if (currentPage !== 'catalog') {
-        navigateTo('catalog');
-      } else {
-        renderCatalog();
-      }
-    }
-
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      handleSearch('');
-    }
-
-    // CART MANAGEMENT
-    function addToCart(productId) {
-      const prod = PRODUCTS.find(p => p.id === productId);
-      const existing = cart.find(item => item.id === productId);
-
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ ...prod, qty: 1 });
-      }
-
-      updateCartUI();
-      showToast(`" ${prod.name} " додано в кошик!`);
-    }
-
-    function updateCartQty(id, delta) {
-      const item = cart.find(i => i.id === id);
-      if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) {
-          cart = cart.filter(i => i.id !== id);
-        }
-      }
-      updateCartUI();
-    }
-
-    function updateCartUI() {
-      const badge = document.getElementById('cartBadge');
-      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-      badge.innerText = totalQty;
-
-      const itemsContainer = document.getElementById('cartItemsList');
-      const summaryContainer = document.getElementById('cartSummaryList');
-      const emptyMsg = document.getElementById('emptyCartMsg');
-      const totalEl = document.getElementById('cartTotalPrice');
-
-      const totalSum = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      totalEl.innerText = `$${totalSum}`;
-
-      if (cart.length === 0) {
-        itemsContainer.innerHTML = '';
-        summaryContainer.innerHTML = `<div class="text-gray-500 italic">Кошик порожній</div>`;
-        emptyMsg.classList.remove('hidden');
-        return;
-      }
-
-      emptyMsg.classList.add('hidden');
-
-      // Left column:Detailed List
-      itemsContainer.innerHTML = cart.map(item => `
-        <div class="flex items-center gap-3 bg-gray-900/80 p-3 rounded-2xl border border-gray-800">
-          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover">
-          <div class="flex-1 min-w-0">
-            <div class="text-[10px] text-gray-500 font-mono">${item.sku}</div>
-            <h4 class="text-xs font-bold text-gray-200 truncate">${item.name}</h4>
-            <div class="text-xs text-amber-400 font-mono font-bold">$${item.price}</div>
-          </div>
-          <div class="flex items-center gap-2 bg-gray-950 px-2 py-1 rounded-xl border border-gray-800">
-            <button onclick="updateCartQty(${item.id}, -1)" class="text-gray-400 hover:text-white text-xs p-1"><i class="fa-solid fa-minus"></i></button>
-            <span class="text-xs font-bold font-mono px-1">${item.qty}</span>
-            <button onclick="updateCartQty(${item.id}, 1)" class="text-gray-400 hover:text-white text-xs p-1"><i class="fa-solid fa-plus"></i></button>
-          </div>
+    <footer class="bg-slate-900 text-slate-300 mt-12 border-t-4 border-brandOrange">
+        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <span class="text-2xl font-extrabold tracking-wider block mb-4">
+                    <span class="text-white">D</span>
+                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
+                        <span class="w-1.5 h-0.5 bg-brandOrange rounded-t-sm mb-0.5"></span>
+                        <span class="text-slate-900 bg-white px-1 py-0.5 rounded shadow-sm leading-none text-xl">I</span>
+                    </span>
+                    <span class="text-white">MA</span>
+                </span>
+                <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footerAbout">Твій ідеальний онлайн-магазин стильного та якісного одягу.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider" data-i18n="contactsTitle">Контактні дані</h4>
+                <ul class="space-y-2.5 text-xs">
+                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-phone text-brandOrange"></i><span>+380 (800) 33-88-00</span></li>
+                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-envelope text-brandOrange"></i><span>support@dima-shop.ua</span></li>
+                    <li class="flex items-center space-x-2.5"><i class="fa-solid fa-location-dot text-brandOrange"></i><span data-i18n="contactAddress">м. Київ, вул. Хрещатик, 24</span></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider" data-i18n="linksTitle">Покупцям</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" class="hover:text-brandOrange transition" data-i18n="linkShipping">Доставка та оплата</a></li>
+                    <li><a href="#" class="hover:text-brandOrange transition" data-i18n="linkReturn">Повернення та обмін</a></li>
+                    <li><a href="#" class="hover:text-brandOrange transition" data-i18n="linkSize">Таблиця розмірів</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider" data-i18n="paymentTitle">Способи оплати</h4>
+                <div class="flex items-center space-x-3 text-2xl text-slate-400">
+                    <i class="fa-brands fa-cc-visa hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-mastercard hover:text-white transition"></i>
+                    <i class="fa-brands fa-apple-pay hover:text-white transition"></i>
+                </div>
+            </div>
         </div>
-      `).join('');
-
-      // Right column: Text Summary List with scrollbar
-      summaryContainer.innerHTML = cart.map(item => `
-        <div class="flex items-center justify-between py-1 border-b border-gray-900 last:border-0">
-          <div class="truncate max-w-[150px]">
-            <span class="text-amber-400 font-bold">${item.sku}</span> x${item.qty}
-          </div>
-          <div class="text-gray-300 font-bold">$${item.price * item.qty}</div>
+        <div class="bg-slate-950 py-4 border-t border-slate-800 text-center text-xs text-slate-500">
+            <p>&copy; 2026 DIMA Clothing Store. Всі права захищені.</p>
         </div>
-      `).join('');
-    }
+    </footer>
 
-    function toggleCartModal() {
-      const modal = document.getElementById('cartModal');
-      modal.classList.toggle('hidden');
-    }
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-brandOrange text-white flex items-center justify-between flex-shrink-0">
+                <h3 class="font-bold text-lg" data-i18n="cartTitle">Кошик замовлення</h3>
+                <button onclick="toggleCartModal()" class="text-white/80 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex flex-col lg:flex-row flex-1 overflow-hidden min-h-[350px]">
+                <div class="lg:w-7/12 border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-col bg-white">
+                    <div class="p-3 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-600 flex justify-between">
+                        <span>Товари у кошику</span>
+                        <span id="cartLeftCount">0 шт</span>
+                    </div>
+                    <div id="cartItemsContainer" class="p-4 space-y-3 flex-1 max-h-[420px] always-scrollbar-y"></div>
+                </div>
+                <div class="lg:w-5/12 flex flex-col bg-slate-50">
+                    <div class="p-3 bg-slate-100 border-b border-slate-200 font-bold text-xs text-slate-700 flex items-center justify-between">
+                        <span data-i18n="summaryTitle">Список товарів (Текст)</span>
+                    </div>
+                    <div id="cartSummaryTextList" class="p-4 space-y-2 flex-1 max-h-[290px] always-scrollbar-y text-xs"></div>
+                    <div class="p-4 border-t border-slate-200 bg-white space-y-3 flex-shrink-0">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 font-bold" data-i18n="cartTotalLabel">Разом до сплати:</span>
+                            <span id="cartTotalPrice" class="text-xl font-black text-slate-900">₴0</span>
+                        </div>
+                        <button onclick="checkout()" class="w-full bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-2.5 px-3 rounded-xl shadow-md transition text-xs flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-credit-card text-xs"></i>
+                            <span data-i18n="checkoutBtn">Оформити замовлення</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function checkout() {
-      if (cart.length === 0) {
-        showToast('Кошик порожній!');
-        return;
-      }
-      showToast('Замовлення успішно створено!');
-      cart = [];
-      updateCartUI();
-      toggleCartModal();
-    }
-
-    // TOAST NOTIFICATION
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').innerText = msg;
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3000);
-    }
-
-    function setLang(lang) {
-      if (lang === 'UA') {
-        document.getElementById('langUA').className = "px-2 py-1 rounded bg-amber-500 text-black font-bold";
-        document.getElementById('langEN').className = "px-2 py-1 rounded text-gray-400 hover:text-white";
-      } else {
-        document.getElementById('langEN').className = "px-2 py-1 rounded bg-amber-500 text-black font-bold";
-        document.getElementById('langUA').className = "px-2 py-1 rounded text-gray-400 hover:text-white";
-      }
-    }
-
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
-</body>
-</html>
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-
