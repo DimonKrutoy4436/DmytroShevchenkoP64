@@ -3,292 +3,424 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIMA - Каталог товарів</title>
+    <title>DIMA — Каталог товарів</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandOrange: '#FF6600',
+                        brandOrangeHover: '#E05C00',
+                    }
+                }
+            }
         }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
         .always-scrollbar-y {
             overflow-y: scroll !important;
             scrollbar-width: thin;
-            scrollbar-color: #475569 #1e293b;
+            scrollbar-color: #CBD5E1 #F1F5F9;
         }
-        .always-scrollbar-y::-webkit-scrollbar {
-            width: 8px;
-            display: block;
-        }
-        .always-scrollbar-y::-webkit-scrollbar-track {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        .always-scrollbar-y::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .always-scrollbar-y::-webkit-scrollbar { width: 8px; display: block; }
+        .always-scrollbar-y::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
+        .always-scrollbar-y::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col text-slate-800 antialiased selection:bg-orange-500 selection:text-white">
 
-  <!-- TOP HEADER -->
-  <header class="bg-gray-950 border-b border-gray-800 sticky top-0 z-40 shadow-xl">
-    <div class="max-w-[1600px] mx-auto px-4 py-3 flex items-center justify-between gap-4">
-      <a href="index.html" class="text-3xl font-black tracking-wider flex items-center gap-1 group">
-        <span class="text-white">D</span>
-        <span class="text-amber-500 group-hover:scale-110 transition-transform inline-block">I</span>
-        <span class="text-white">MA</span>
-      </a>
+    <!-- ВЕРХНЯ ЧАСТИНА САЙТУ (ідентична) -->
+    <header class="bg-white border-b-2 border-orange-500 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <a href="index.html" class="flex items-center space-x-1 group">
+                <span class="text-3xl font-extrabold tracking-wider transition duration-200 group-hover:scale-105 inline-block">
+                    <span class="text-slate-900">D</span>
+                    <span class="inline-flex flex-col items-center mx-0.5 relative top-0.5">
+                        <span class="w-2.5 h-1.5 bg-orange-500 rounded-t-sm mb-0.5"></span>
+                        <span class="text-white bg-orange-500 px-1.5 py-0.5 rounded shadow-sm leading-none font-black">I</span>
+                    </span>
+                    <span class="text-slate-900">MA</span>
+                </span>
+            </a>
 
-      <!-- Search Bar -->
-      <div class="flex-1 max-w-xl relative">
-        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Пошук одягу, взуття, бренду..." class="w-full bg-gray-900 border border-gray-700 rounded-full py-2 pl-10 pr-10 text-sm text-gray-200 focus:outline-none focus:border-amber-500 transition-colors">
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
-      </div>
+            <div class="flex-1 max-w-xl mx-2 min-w-[240px]">
+                <div class="relative">
+                    <input type="text" id="searchInput" oninput="renderCatalog()"
+                        placeholder="Пошук по каталогу..."
+                        class="w-full bg-white text-slate-900 border border-slate-200 placeholder-slate-400 pl-10 pr-4 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-400 shadow-inner text-sm transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400"></i>
+                </div>
+            </div>
 
-      <div class="flex items-center gap-5">
-        <button onclick="toggleCartModal()" class="relative p-2 text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2">
-          <i class="fa-solid fa-cart-shopping text-lg"></i>
-          <span class="hidden sm:inline font-medium text-sm">Кошик</span>
-          <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-black font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center border-2 border-gray-950">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCartModal()" class="relative p-2 rounded-full hover:bg-orange-50 text-orange-500 transition" title="Кошик">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
+                </button>
 
-  <!-- CATALOG PAGE CONTENT CONTAINER -->
-  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 py-6">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- LEFT SIDEBAR: FILTERS -->
-      <aside class="lg:col-span-3 space-y-5 bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit">
+                <div class="flex items-center space-x-2 bg-slate-50 pl-2 pr-3 py-1 rounded-full border border-slate-200">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Аватар" class="w-8 h-8 rounded-full object-cover border border-orange-500">
+                    <div class="text-xs leading-tight hidden sm:block">
+                        <p class="font-bold text-slate-900">Олександр В.</p>
+                        <p class="text-orange-600 font-semibold">Баланс: <span id="userBalance">₴12,500</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-6 flex-1 flex flex-col md:flex-row gap-6 w-full">
         
-        <!-- BUTTON: "ГОЛОВНА" -->
-        <a href="index.html" class="w-full py-3.5 px-4 bg-gray-900 hover:bg-gray-800 text-amber-400 font-extrabold rounded-2xl shadow-md border border-amber-500/40 flex items-center justify-between group transition-all transform active:scale-95 block text-center">
-          <span class="flex items-center gap-2.5 text-base tracking-wide">
-            <i class="fa-solid fa-house text-lg group-hover:-translate-x-1 transition-transform"></i>
-            ГОЛОВНА
-          </span>
-          <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-        </a>
+        <!-- ЛІВА ЧАСТИНА САЙТУ (Кнопка ГОЛОВНА, активні фільтри, 3 стовпчики підкатегорій, ціновий слайдер, країна-виробник) -->
+        <aside class="w-full md:w-72 flex-shrink-0 flex flex-col gap-6">
+            <a href="index.html" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl shadow-md transition flex items-center justify-between text-sm group">
+                <i class="fa-solid fa-arrow-left transition group-hover:-translate-x-1"></i>
+                <span>ГОЛОВНА</span>
+            </a>
 
-        <!-- Selected Filters Section -->
-        <div class="border-t border-gray-800 pt-4">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Обрані фільтри</h3>
-            <button onclick="resetAllFilters()" class="text-[11px] text-amber-400 hover:underline font-medium">Очистити все</button>
-          </div>
-          <div id="activeFiltersChips" class="flex flex-wrap gap-1.5 min-h-[32px] p-2 bg-gray-900 rounded-xl border border-gray-800/80">
-            <span class="text-xs text-gray-500 self-center italic">Немає фільтрів</span>
-          </div>
-        </div>
-
-        <!-- 3 Separate Columns of Categories -->
-        <div class="border-t border-gray-800 pt-4 space-y-4">
-          <h3 class="text-xs font-bold text-amber-500 uppercase tracking-wider">Категорії товару</h3>
-          
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2">Верхній одяг</div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Куртки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Куртки"> Куртки</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Пальта')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Пальта"> Пальта</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Пуховики')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Пуховики"> Пуховики</label>
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider">Обрані фільтри</h4>
+                    <button onclick="clearAllFilters()" class="text-[10px] text-orange-600 hover:underline font-semibold">Скинути всі</button>
+                </div>
+                <div id="activeFiltersList" class="flex flex-wrap gap-1.5 min-h-[30px] items-center text-xs text-slate-400 italic">
+                    Фільтри не вибрано
+                </div>
             </div>
-          </div>
 
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2">Повсякденний одяг</div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Худі')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Худі"> Худі</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Футболки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Футболки"> Футболки</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Джинси')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Джинси"> Джинси</label>
+            <!-- Три окремих стовпчика категорій з трьома підкатегоріями в кожній -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-4">
+                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider border-b pb-2">Категорії одягу</h4>
+                
+                <div>
+                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Верхній одяг</span>
+                    <div class="space-y-1 text-xs text-slate-600 pl-1">
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Куртки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Куртки</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Пальта" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Пальта</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Пуховики" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Пуховики</span></label>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Повсякденний одяг</span>
+                    <div class="space-y-1 text-xs text-slate-600 pl-1">
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Худі" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Худі</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Футболки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Футболки</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Джинси" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Джинси</span></label>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-xs font-bold text-slate-900 block mb-1.5">Взуття та Аксесуари</span>
+                    <div class="space-y-1 text-xs text-slate-600 pl-1">
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Кросівки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Кросівки</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Черевики" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Черевики</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="subcat" value="Сумки" onchange="renderCatalog()" class="rounded text-orange-500 focus:ring-orange-400"><span>Сумки</span></label>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-            <div class="text-xs font-bold text-gray-200 mb-2">Взуття та Аксесуари</div>
-            <div class="space-y-1.5 text-xs">
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Кросівки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Кросівки"> Кросівки</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Черевики')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Черевики"> Черевики</label>
-              <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleSubcategory('Сумки')" class="subcat-checkbox rounded bg-gray-800 border-gray-700 text-amber-500" value="Сумки"> Сумки</label>
+            <!-- Категорія 4 з горизонтальним повзунком регулювання цін -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2">Фільтр за ціною</h4>
+                <div class="space-y-2">
+                    <input type="range" id="priceRange" min="300" max="5000" step="100" value="5000" oninput="updatePriceLabel(this.value); renderCatalog();" class="w-full accent-orange-500">
+                    <div class="flex justify-between text-xs text-slate-500">
+                        <span>₴300</span>
+                        <span id="priceLabel" class="font-bold text-slate-900">До ₴5,000</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Price Range Slider -->
-        <div class="border-t border-gray-800 pt-4 space-y-2">
-          <div class="flex justify-between items-center text-xs">
-            <span class="font-bold text-gray-300">Ціновий діапазон</span>
-            <span class="text-amber-400 font-mono font-bold">$<span id="priceValue">500</span></span>
-          </div>
-          <input type="range" id="priceSlider" min="10" max="500" step="10" value="500" oninput="handlePriceSlider(this.value)" class="w-full accent-amber-500 bg-gray-800 rounded-lg h-1.5 cursor-pointer">
-        </div>
+            <!-- Країна Виробник -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <h4 class="font-bold text-xs text-slate-700 uppercase tracking-wider mb-2">Країна Виробник</h4>
+                <div class="space-y-1 text-xs text-slate-600">
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="США" onchange="renderCatalog()" class="rounded text-orange-500"><span>США</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Китай" onchange="renderCatalog()" class="rounded text-orange-500"><span>Китай</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Італія" onchange="renderCatalog()" class="rounded text-orange-500"><span>Італія</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Франція" onchange="renderCatalog()" class="rounded text-orange-500"><span>Франція</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Німеччина" onchange="renderCatalog()" class="rounded text-orange-500"><span>Німеччина</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer hover:text-orange-600"><input type="checkbox" name="country" value="Україна" onchange="renderCatalog()" class="rounded text-orange-500"><span>Україна</span></label>
+                </div>
+            </div>
+        </aside>
 
-        <!-- Country of Origin -->
-        <div class="border-t border-gray-800 pt-4 space-y-2">
-          <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Країна Виробник</h3>
-          <div class="space-y-1.5 text-xs">
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('США')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="США"> США</label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('Китай')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="Китай"> Китай</label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('Італія')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="Італія"> Італія</label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('Франція')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="Франція"> Франція</label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('Німеччина')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="Німеччина"> Німеччина</label>
-            <label class="flex items-center gap-2 text-gray-300 hover:text-white cursor-pointer"><input type="checkbox" onchange="toggleCountry('Україна')" class="country-checkbox rounded bg-gray-800 text-amber-500" value="Україна"> Україна</label>
-          </div>
-        </div>
+        <!-- ЦЕНТРАЛЬНА ЧАСТИНА САЙТУ: Прямокутник сортування + список карток (5 в ряд) -->
+        <main class="flex-1 flex flex-col gap-4 min-w-0">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-arrow-down-wide-short text-orange-500"></i>
+                    <span class="font-bold text-xs text-slate-700 uppercase">Сортування товарів:</span>
+                </div>
+                <select id="sortSelect" onchange="renderCatalog()" class="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <option value="relevance">За релевантністю</option>
+                    <option value="cheap">Від дешевих до дорогих</option>
+                    <option value="expensive">Від дорогих до дешевих</option>
+                </select>
+            </div>
 
-      </aside>
-
-      <!-- CENTRAL SECTION: SORTING + 5 CARDS PER ROW GRID -->
-      <section class="lg:col-span-9 space-y-4">
-        
-        <div class="bg-gray-950 border border-gray-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div class="text-sm font-medium text-gray-300">
-            Знайдено товарів: <span id="catalogCount" class="font-bold text-amber-400 font-mono text-base">0</span>
-          </div>
-          <div class="flex items-center gap-3 w-full sm:w-auto">
-            <span class="text-xs text-gray-400 font-semibold whitespace-nowrap">Сортувати:</span>
-            <select id="sortSelect" onchange="handleSortChange(this.value)" class="bg-gray-900 border border-gray-700 text-gray-200 text-xs font-semibold rounded-xl px-3 py-2 focus:outline-none focus:border-amber-500 cursor-pointer w-full sm:w-auto">
-              <option value="relevance">За релевантністю</option>
-              <option value="lowToHigh">Від дешевих до дорогих</option>
-              <option value="highToLow">Від дорогих до дешевих</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Scrollable Product Grid (5 per row on desktop) -->
-        <div class="max-h-[85vh] overflow-y-auto pr-1 always-scrollbar-y">
-          <div id="catalogGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3.5 pb-6">
-            <!-- Dynamic product cards -->
-          </div>
-          <div id="noProductsMessage" class="hidden py-16 text-center space-y-3 bg-gray-950/50 border border-gray-800 rounded-2xl">
-            <i class="fa-solid fa-box-open text-4xl text-gray-600"></i>
-            <p class="text-gray-400 text-sm">За вашими фільтрами товарів не знайдено.</p>
-          </div>
-        </div>
-
-      </section>
+            <!-- Список карток (5 в ряд), з вертикальною прокруткою вгору та вниз -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 h-[750px] always-scrollbar-y">
+                <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+            </div>
+        </main>
     </div>
-  </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-gray-950 border-t border-gray-800 mt-12 py-10 text-gray-400 text-sm">
-    <div class="max-w-[1600px] mx-auto px-4 text-center text-xs text-gray-600">
-      &copy; 2026 DIMA Clothing Store. Всі права захищено.
+    <!-- КОНТАКТНІ ДАНІ (ЗАМІСТЬ FOOTER) -->
+    <footer class="bg-slate-900 text-slate-300 mt-12 border-t-4 border-orange-500">
+        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-xs">
+            <div>
+                <span class="text-2xl font-extrabold tracking-wider block mb-4 text-white">DIMA</span>
+                <p class="text-slate-400">Твій ідеальний онлайн-магазин стильного одягу.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase">Контакти</h4>
+                <p>+380 (800) 33-88-00</p>
+                <p>support@dima-shop.ua</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase">Покупцям</h4>
+                <p>Доставка та оплата</p>
+                <p>Повернення товару</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase">Оплата</h4>
+                <div class="flex space-x-2 text-xl"><i class="fa-brands fa-cc-visa"></i><i class="fa-brands fa-cc-mastercard"></i></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальне вікно кошика -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-orange-500 text-white flex items-center justify-between">
+                <h3 class="font-bold text-lg">Кошик замовлення</h3>
+                <button onclick="toggleCartModal()" class="text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex flex-col lg:flex-row flex-1 overflow-hidden min-h-[350px]">
+                <div class="lg:w-7/12 border-r border-slate-200 flex flex-col bg-white">
+                    <div class="p-3 bg-slate-50 border-b font-bold text-xs text-slate-600 flex justify-between">
+                        <span>Товари</span><span id="cartLeftCount">0 шт</span>
+                    </div>
+                    <div id="cartItemsContainer" class="p-4 space-y-3 flex-1 max-h-[420px] always-scrollbar-y"></div>
+                </div>
+                <div class="lg:w-5/12 flex flex-col bg-slate-50">
+                    <div class="p-3 bg-slate-100 border-b font-bold text-xs text-slate-700">Список товарів (Текст)</div>
+                    <div id="cartSummaryTextList" class="p-4 space-y-2 flex-1 max-h-[290px] always-scrollbar-y text-xs"></div>
+                    <div class="p-4 border-t bg-white space-y-3">
+                        <div class="flex justify-between items-center text-sm font-bold">
+                            <span>Разом:</span><span id="cartTotalPrice" class="text-xl text-slate-900">₴0</span>
+                        </div>
+                        <button onclick="checkout()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 rounded-xl text-xs">Оформити замовлення</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
 
-  <!-- SCRIPT LOGIC FOR CATALOG -->
-  <script>
-    const PRODUCTS = [
-      { id: 1, sku: 'DM-1001', name: 'Зимовий Пуховик "Nordic Peak"', subcat: 'Пуховики', mainCat: 'Upper', price: 280, rating: 5, reviews: 48, country: 'Італія', image: 'https://images.unsplash.com/photo-1544923246-77307dd654cb?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 350 },
-      { id: 2, sku: 'DM-1002', name: 'Куртка Шкіряна "Urban Biker"', subcat: 'Куртки', mainCat: 'Upper', price: 210, rating: 4, reviews: 32, country: 'Німеччина', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 3, sku: 'DM-1003', name: 'Пальто Вовняне "Classic Style"', subcat: 'Пальта', mainCat: 'Upper', price: 340, rating: 5, reviews: 19, country: 'Франція', image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 420 },
-      { id: 4, sku: 'DM-1004', name: 'Худі Оверсайз "Street Vibe"', subcat: 'Худі', mainCat: 'Hoodies', price: 85, rating: 5, reviews: 94, country: 'США', image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 110 },
-      { id: 5, sku: 'DM-1005', name: 'Футболка Базова "Minimal Pure"', subcat: 'Футболки', mainCat: 'Tshirts', price: 35, rating: 4, reviews: 120, country: 'Україна', image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 6, sku: 'DM-1006', name: 'Джинси Прямі "Heritage Denim"', subcat: 'Джинси', mainCat: 'Pants', price: 110, rating: 4, reviews: 55, country: 'США', image: 'https://images.unsplash.com/photo-1542272604-780c36856842?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 7, sku: 'DM-1007', name: 'Кросівки "Future Runner X"', subcat: 'Кросівки', mainCat: 'Shoes', price: 165, rating: 5, reviews: 88, country: 'Китай', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 200 },
-      { id: 8, sku: 'DM-1008', name: 'Черевики Шкіряні "Winter Grip"', subcat: 'Черевики', mainCat: 'Shoes', price: 230, rating: 5, reviews: 41, country: 'Німеччина', image: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=500&auto=format&fit=crop&q=80', isDiscounted: false },
-      { id: 9, sku: 'DM-1009', name: 'Сумка Шкіряна "Metro Tote"', subcat: 'Сумки', mainCat: 'Accessories', price: 145, rating: 4, reviews: 27, country: 'Італія', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 180 },
-      { id: 10, sku: 'DM-1010', name: 'Пуховик Короткий "Puffer Neon"', subcat: 'Пуховики', mainCat: 'Upper', price: 250, rating: 5, reviews: 63, country: 'Україна', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80', isDiscounted: true, oldPrice: 300 }
-    ];
+    <script>
+        let userBalance = 12500;
+        let cart = [];
 
-    let selectedSubcategories = [];
-    let selectedCountries = [];
-    let maxPrice = 500;
-    let sortBy = 'relevance';
-    let searchQuery = '';
+        const catalogProducts = [
+            { id: 1, sku: "DM-101", name: "Куртка зимова Alaska", category: "Куртки", price: 2800, rating: 5, reviews: 42, country: "США", image: "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=600" },
+            { id: 2, sku: "DM-102", name: "Пальто шерстяне Classic", category: "Пальта", price: 3400, rating: 4, reviews: 18, country: "Італія", image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=600" },
+            { id: 3, sku: "DM-103", name: "Пуховик Warm Urban", category: "Пуховики", price: 3100, rating: 5, reviews: 29, country: "Китай", image: "https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&q=80&w=600" },
+            { id: 4, sku: "DM-104", name: "Худі Oversize Street", category: "Худі", price: 1350, rating: 4, reviews: 55, country: "Україна", image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&q=80&w=600" },
+            { id: 5, sku: "DM-105", name: "Футболка Basic Cotton", category: "Футболки", price: 490, rating: 5, reviews: 88, country: "Німеччина", image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&q=80&w=600" },
+            { id: 6, sku: "DM-106", name: "Джинси Cargo Blue", category: "Джинси", price: 1450, rating: 4, reviews: 31, country: "Франція", image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&q=80&w=600" },
+            { id: 7, sku: "DM-107", name: "Кросівки Sport Runner", category: "Кросівки", price: 2990, rating: 5, reviews: 74, country: "США", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600" },
+            { id: 8, sku: "DM-108", name: "Черевики Leather Boots", category: "Черевики", price: 3800, rating: 5, reviews: 21, country: "Італія", image: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&q=80&w=600" },
+            { id: 9, sku: "DM-109", name: "Сумка міська Leather", category: "Сумки", price: 1800, rating: 4, reviews: 14, country: "Україна", image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=600" }
+        ];
 
-    window.onload = function() {
-      renderCatalog();
-    };
-
-    function renderCatalog() {
-      let filtered = PRODUCTS.filter(p => {
-        if (p.price > maxPrice) return false;
-        if (selectedSubcategories.length > 0 && !selectedSubcategories.includes(p.subcat)) return false;
-        if (selectedCountries.length > 0 && !selectedCountries.includes(p.country)) return false;
-        if (searchQuery.trim() !== '') {
-          const q = searchQuery.toLowerCase();
-          if (!p.name.toLowerCase().includes(q) && !p.sku.toLowerCase().includes(q)) return false;
+        function updatePriceLabel(val) {
+            document.getElementById('priceLabel').innerText = `До ₴${Number(val).toLocaleString()}`;
         }
-        return true;
-      });
 
-      if (sortBy === 'lowToHigh') filtered.sort((a, b) => a.price - b.price);
-      if (sortBy === 'highToLow') filtered.sort((a, b) => b.price - a.price);
+        function renderCatalog() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            const maxPrice = Number(document.getElementById('priceRange').value);
+            const sortVal = document.getElementById('sortSelect').value;
 
-      const grid = document.getElementById('catalogGrid');
-      document.getElementById('catalogCount').innerText = filtered.length;
-      
-      if (filtered.length === 0) {
-        grid.innerHTML = '';
-        document.getElementById('noProductsMessage').classList.remove('hidden');
-      } else {
-        document.getElementById('noProductsMessage').classList.add('hidden');
-        grid.innerHTML = filtered.map(p => `
-          <div class="bg-gray-950 border border-gray-800 rounded-2xl p-3 flex flex-col justify-between group shadow-lg">
-            <div class="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">
-              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-            </div>
-            <div class="flex-1 flex flex-col justify-between space-y-2">
-              <div>
-                <div class="text-[10px] text-gray-500 font-mono">${p.sku}</div>
-                <h3 class="text-xs font-bold text-gray-100 line-clamp-2">${p.name}</h3>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-black text-amber-400 font-mono">$${p.price}</span>
-              </div>
-            </div>
-          </div>
-        `).join('');
-      }
-    }
+            const selectedSubcats = Array.from(document.querySelectorAll('input[name="subcat"]:checked')).map(el => el.value);
+            const selectedCountries = Array.from(document.querySelectorAll('input[name="country"]:checked')).map(el => el.value);
 
-    function toggleSubcategory(subcat) {
-      if (selectedSubcategories.includes(subcat)) selectedSubcategories = selectedSubcategories.filter(s => s !== subcat);
-      else selectedSubcategories.push(subcat);
-      renderCatalog();
-    }
+            let filtered = catalogProducts.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(searchQuery) || p.sku.toLowerCase().includes(searchQuery);
+                const matchSubcat = selectedSubcats.length === 0 || selectedSubcats.includes(p.category);
+                const matchCountry = selectedCountries.length === 0 || selectedCountries.includes(p.country);
+                const matchPrice = p.price <= maxPrice;
+                return matchSearch && matchSubcat && matchCountry && matchPrice;
+            });
 
-    function toggleCountry(country) {
-      if (selectedCountries.includes(country)) selectedCountries = selectedCountries.filter(c => c !== country);
-      else selectedCountries.push(country);
-      renderCatalog();
-    }
+            if (sortVal === 'cheap') filtered.sort((a,b) => a.price - b.price);
+            if (sortVal === 'expensive') filtered.sort((a,b) => b.price - a.price);
 
-    function handlePriceSlider(val) {
-      maxPrice = parseInt(val);
-      document.getElementById('priceValue').innerText = val;
-      renderCatalog();
-    }
+            renderActiveChips(selectedSubcats, selectedCountries, maxPrice);
 
-    function handleSortChange(val) {
-      sortBy = val;
-      renderCatalog();
-    }
+            const grid = document.getElementById('catalogGrid');
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400 text-sm">Товарів за вашим запитом не знайдено</div>`;
+                return;
+            }
 
-    function handleSearch(val) {
-      searchQuery = val;
-      renderCatalog();
-    }
+            grid.innerHTML = filtered.map(p => {
+                const stars = '★'.repeat(p.rating) + '☆'.repeat(5 - p.rating);
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col overflow-hidden group">
+                        <div class="relative bg-slate-100 pt-[100%] overflow-hidden">
+                            <img src="${p.image}" alt="${p.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute bottom-2 right-2 bg-slate-900/70 text-white text-[10px] font-mono px-2 py-0.5 rounded">Арт: ${p.sku}</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-xs mb-1 truncate">${p.name}</h4>
+                                <div class="flex items-center space-x-1 text-[10px] text-amber-500 mb-1">
+                                    <span>${stars}</span>
+                                    <span class="text-slate-400">(${p.reviews})</span>
+                                </div>
+                                <div class="text-sm font-extrabold text-slate-900 mb-3">₴${p.price.toLocaleString()}</div>
+                            </div>
+                            <button onclick="addToCatalogCart(${p.id})" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs py-2 rounded-xl transition shadow flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-cart-plus text-xs"></i><span>В кошик</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-    function resetAllFilters() {
-      selectedSubcategories = [];
-      selectedCountries = [];
-      maxPrice = 500;
-      document.getElementById('priceSlider').value = 500;
-      document.getElementById('priceValue').innerText = '500';
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-      renderCatalog();
-    }
+        function renderActiveChips(subcats, countries, maxPrice) {
+            const container = document.getElementById('activeFiltersList');
+            let chips = [];
 
-    function toggleCartModal() {
-      alert("Відкриття модального вікна кошика");
-    }
-  </script>
+            subcats.forEach(s => chips.push({ label: s, type: 'subcat', value: s }));
+            countries.forEach(c => chips.push({ label: c, type: 'country', value: c }));
+            if (maxPrice < 5000) chips.push({ label: `До ₴${maxPrice}`, type: 'price', value: 5000 });
+
+            if (chips.length === 0) {
+                container.innerHTML = `<span class="italic text-slate-400">Фільтри не вибрано</span>`;
+                return;
+            }
+
+            container.innerHTML = chips.map(chip => `
+                <span class="inline-flex items-center bg-orange-50 text-orange-600 border border-orange-200 px-2.5 py-1 rounded-full text-xs font-semibold gap-1.5">
+                    ${chip.label}
+                    <button onclick="removeFilter('${chip.type}', '${chip.value}')" class="hover:text-red-600 font-bold"><i class="fa-solid fa-xmark text-[10px]"></i></button>
+                </span>
+            `).join('');
+        }
+
+        function removeFilter(type, val) {
+            if (type === 'subcat') {
+                document.querySelectorAll('input[name="subcat"]').forEach(el => { if (el.value === val) el.checked = false; });
+            } else if (type === 'country') {
+                document.querySelectorAll('input[name="country"]').forEach(el => { if (el.value === val) el.checked = false; });
+            } else if (type === 'price') {
+                document.getElementById('priceRange').value = 5000;
+                updatePriceLabel(5000);
+            }
+            renderCatalog();
+        }
+
+        function clearAllFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.getElementById('priceRange').value = 5000;
+            updatePriceLabel(5000);
+            renderCatalog();
+        }
+
+        function toggleCartModal() { document.getElementById('cartModal').classList.toggle('hidden'); }
+
+        function addToCatalogCart(id) {
+            const product = catalogProducts.find(p => p.id === id);
+            if (!product) return;
+            const existing = cart.find(item => item.id === id);
+            if (existing) existing.qty += 1; else cart.push({ ...product, qty: 1 });
+            updateCartUI();
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const leftContainer = document.getElementById('cartItemsContainer');
+            const rightTextList = document.getElementById('cartSummaryTextList');
+            const badge = document.getElementById('cartBadge');
+            const totalPriceEl = document.getElementById('cartTotalPrice');
+            const leftCountEl = document.getElementById('cartLeftCount');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (totalItems > 0) { badge.innerText = totalItems; badge.classList.remove('hidden'); }
+            else { badge.classList.add('hidden'); }
+
+            leftCountEl.innerText = `${totalItems} шт`;
+            totalPriceEl.innerText = `₴${totalPrice.toLocaleString()}`;
+
+            if (cart.length === 0) {
+                leftContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-xs">Кошик порожній</div>`;
+                rightTextList.innerHTML = `<p class="text-slate-400 text-center py-8 italic text-xs">Кошик порожній</p>`;
+                return;
+            }
+
+            leftContainer.innerHTML = cart.map((item, index) => `
+                <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 gap-2">
+                    <div class="flex items-center space-x-2.5 min-w-0 flex-1">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg bg-white border flex-shrink-0">
+                        <div class="min-w-0">
+                            <h5 class="font-bold text-xs text-slate-900 truncate">${item.name}</h5>
+                            <span class="text-[10px] text-orange-600 font-mono font-bold bg-orange-50 px-1 py-0.5 rounded">Арт: ${item.sku}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1.5 bg-white px-2 py-0.5 rounded-lg border flex-shrink-0">
+                        <button onclick="changeQty(${index}, -1)" class="text-slate-500 font-bold text-xs w-4">-</button>
+                        <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                        <button onclick="changeQty(${index}, 1)" class="text-slate-500 font-bold text-xs w-4">+</button>
+                    </div>
+                    <div class="text-right flex-shrink-0 min-w-[65px]">
+                        <span class="text-xs font-extrabold text-slate-900">₴${(item.price * item.qty).toLocaleString()}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            rightTextList.innerHTML = cart.map((item) => `
+                <div class="p-2 bg-white rounded-lg border border-slate-200 flex flex-col gap-1 text-xs">
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="font-bold text-slate-800">${item.name}</span>
+                        <span class="text-orange-600 font-extrabold">₴${(item.price * item.qty).toLocaleString()}</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1 border-t border-slate-100">
+                        <span>Арт: <strong class="font-mono">${item.sku}</strong></span>
+                        <span>Кількість: <strong>${item.qty} шт</strong></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkout() {
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            if (cart.length === 0) return;
+            if (userBalance < totalPrice) { alert("Недостатньо коштів на балансі!"); return; }
+            userBalance -= totalPrice;
+            document.getElementById('userBalance').innerText = `₴${userBalance.toLocaleString()}`;
+            cart = [];
+            updateCartUI();
+            toggleCartModal();
+            alert("Дякуємо! Замовлення успішно оформлено.");
+        }
+
+        window.onload = function() { renderCatalog(); updateCartUI(); };
+    </script>
 </body>
 </html>
