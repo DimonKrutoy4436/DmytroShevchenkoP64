@@ -1,0 +1,55 @@
+name: Deploy Multi-Branch Site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main      # Главный сайт
+      - feature-a # Второй сайт
+      - feature-b # Третий сайт
+
+# Предоставляем права для автоматического деплоя в GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/pages-config-action@v1
+
+      # Организуем папку в зависимости от ветки
+      - name: Prepare Files
+        run: |
+          mkdir -p _site
+          BRANCH_NAME="${GITHUB_REF_NAME}"
+
+          if [ "$BRANCH_NAME" = "main" ]; then
+            # Главный сайт деплоится в корень
+            cp -R ./* _site/ 2>/dev/null || true
+          else
+            # Остальные ветки попадают в подпапку с именем ветки
+            mkdir -p _site/$BRANCH_NAME
+            cp -R ./* _site/$BRANCH_NAME/ 2>/dev/null || true
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
