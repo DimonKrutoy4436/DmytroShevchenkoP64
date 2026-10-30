@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8f8f8;
+  color: #333333;
+  line-height: 1.6;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px 60px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #000000;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 12px;
+  color: #000000;
+}
+
+p {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #444444;
+}
+
+/* Окремий стиль для формул (рожево-червоний блок) */
+.formula-box {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.formula {
+  display: inline-block;
+  background-color: #fcdbdc;
+  color: #a82024;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 3px;
+}
+
+/* Форматування змінних */
+strong {
+  color: #8b0000;
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
