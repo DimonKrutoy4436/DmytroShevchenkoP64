@@ -1,4 +1,3 @@
-/* Фон усієї сторінки браузера — світло-сірий */
 body {
     font-family: Arial, sans-serif;
     background-color: gainsboro;
@@ -7,7 +6,6 @@ body {
     color: dimgray;
 }
 
-/* Біла картка-аркуш по центру сторінки */
 .page {
     background-color: white;
     max-width: 800px;
@@ -15,7 +13,6 @@ body {
     padding: 40px;
 }
 
-/* Заголовки */
 h1 {
     text-align: center;
     color: black;
@@ -32,18 +29,17 @@ p {
     line-height: 1.5;
 }
 
-/* Усі жирні літери та символи (тег <b>) будуть бордовими та жирними */
 b {
     color: maroon;
     font-weight: bold;
 }
 
-/* Курсивні букви */
+
 i {
     font-style: italic;
 }
 
-/* Стиль рожево-бордової рамки з формулою (тепер текст всередині не є примусово жирним) */
+
 .formula {
     background-color: pink;
     color: black;
@@ -53,7 +49,7 @@ i {
     border-radius: 3px;
 }
 
-/* Вирівнювання формули по центру */
+
 .center {
     text-align: center;
 }
