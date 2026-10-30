@@ -1,68 +1,59 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Фон усієї сторінки браузера — світло-сірий */
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f8f8f8;
-  color: #333333;
-  line-height: 1.6;
-  padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    background-color: gainsboro;
+    margin: 0;
+    padding: 30px;
+    color: dimgray;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #ffffff;
-  padding: 40px 60px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+/* Біла картка-аркуш по центру сторінки */
+.page {
+    background-color: white;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
 }
 
+/* Заголовки */
 h1 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 30px;
-  color: #000000;
+    text-align: center;
+    color: black;
 }
 
 h2 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 25px;
-  margin-bottom: 12px;
-  color: #000000;
+    font-size: 16px;
+    margin-top: 25px;
+    color: black;
 }
 
 p {
-  font-size: 14px;
-  margin-bottom: 12px;
-  color: #444444;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-/* Окремий стиль для формул (рожево-червоний блок) */
-.formula-box {
-  text-align: center;
-  margin: 15px 0;
+/* Усі жирні літери та символи (тег <b>) будуть бордовими та жирними */
+b {
+    color: maroon;
+    font-weight: bold;
 }
 
+/* Курсивні букви */
+i {
+    font-style: italic;
+}
+
+/* Стиль рожево-бордової рамки з формулою (тепер текст всередині не є примусово жирним) */
 .formula {
-  display: inline-block;
-  background-color: #fcdbdc;
-  color: #a82024;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 6px 16px;
-  border-radius: 3px;
+    background-color: pink;
+    color: black;
+    padding: 6px 14px;
+    display: inline;
+    margin: 10px 0;
+    border-radius: 3px;
 }
 
-/* Форматування змінних */
-strong {
-  color: #8b0000;
-  font-weight: bold;
-}
-
-em {
-  font-style: italic;
+/* Вирівнювання формули по центру */
+.center {
+    text-align: center;
 }
