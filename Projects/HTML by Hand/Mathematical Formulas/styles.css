@@ -43,10 +43,12 @@ i {
 .formula {
     background-color: pink;
     color: black;
-    padding: 6px 14px;
+    padding-right: 5px ;
+    padding-left: 5px;
+    padding-top: 2px;
     display: inline;
     margin: 10px 0;
-    border-radius: 3px;
+    border-radius: 0px;
 }
 
 
