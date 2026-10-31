@@ -60,6 +60,11 @@ body {
   color: rgb(106, 90, 205);
 }
 
+card3 p {
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
 .price {
   color: maroon;
   font-size: 18px;
