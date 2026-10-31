@@ -1,15 +1,12 @@
 body {
     font-family: Arial, sans-serif;
     background-color: gainsboro;
-    margin: 0;
     padding: 30px;
     color: dimgray;
 }
 
 .page {
     background-color: white;
-    max-width: 800px;
-    margin: 0 auto;
     padding: 40px;
 }
 
@@ -20,7 +17,6 @@ h1 {
 
 h2 {
     font-size: 16px;
-    margin-top: 25px;
     color: black;
 }
 
@@ -46,7 +42,6 @@ i {
     padding-left: 5px;
     padding-top: 2px;
     display: inline;
-    margin: 10px 0;
     border-radius: 0px;
 }
 
