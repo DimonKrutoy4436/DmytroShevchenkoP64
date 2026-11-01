@@ -9,10 +9,25 @@
             background-image: url("../assets/background.jpg");
             background-position: center;
         }
+        .container {
+            position: relative;
+            width: 150px;
+            height: 200px;
+            border: 0.5px solid;
+        }
+        .container img {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            object-fit: contain;
+            opacity: 0.5;
+        }
     </style>
     
 </head>
 <body>
-    
+    <div class="container">
+        <img src="../assets/image1.jpg" alt="Image 1">
+    </div>
 </body>
 </html>
