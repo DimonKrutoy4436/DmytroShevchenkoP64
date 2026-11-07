@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .fruit-container {
+            background-color: lightblue;
+            padding: 30px;
+            border-radius: 4px;
+            width: 400px;
+        }
+
+        .fruit-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fruit-item {
+            background-color: rgb(10, 10, 255);
+            color: white;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .fruit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .fruit-number {
+            padding: 12px 16px;
+            font-weight: bold;
+        }
+
+        .fruit-text {
+            background-color: darkblue;
+            padding: 12px 20px;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="fruit-container">
+    <ul class="fruit-list">
+        <li class="fruit-item">
+        <span class="fruit-number">1.</span>
+        <span class="fruit-text">Apple</span>   
+    </li>
+        <li class="fruit-item">
+    <span class="fruit-number">2.</span>
+    <span class="fruit-text">Orange</span>
+        </li>
+        <li class="fruit-item">
+            <span class="fruit-number">3.</span>
+            <span class="fruit-text">Pineapple</span>
+        </li>
+        <li class="fruit-item">
+            <span class="fruit-number">4.</span>
+            <span class="fruit-text">Pear</span>
+        </li>
+        <li class="fruit-item">
+            <span class="fruit-number">5.</span>
+            <span class="fruit-text">Cherry</span>
+        </li>
+    </ul>
+    </div>     
+</body>
+</html>
