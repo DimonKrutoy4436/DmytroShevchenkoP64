@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .todo-card {
+            background-color: #ffffff;
+            width: 450px;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .todo-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        /* Парні та непарні елементи мають блакитне тло з різними відтінками */
+        .todo-item:nth-child(odd) {
+            background-color: #c5dbe6; /* світло-блакитний */
+        }
+
+        .todo-item:nth-child(even) {
+            background-color: #e2e2e2; /* сірий */
+        }
+
+        .todo-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .todo-icon {
+            font-size: 16px;
+        }
+
+        /* Стилі для виконаних завдань (позначених) */
+        .completed span.text {
+            text-decoration: line-through;
+            color: #555;
+        }
+
+        /* Червоний хрестик */
+        .delete-btn {
+            color: #d9534f;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-card">
+        <h2>My To Do List</h2>
+        <ul class="todo-list">
+            <!-- Невизначене завдання -->
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Hit the gym</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <!-- Позначене завдання -->
+            <li class="todo-item completed">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2611;</span>
+                    <span class="text">Pay bills</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Meet John</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Buy eggs</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item completed">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2611;</span>
+                    <span class="text">Read a book</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Organize office</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Eat dinner</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Buy apples</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Meet George</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Feed the cat</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item completed">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2611;</span>
+                    <span class="text">Write a letter</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+            <li class="todo-item">
+                <div class="todo-content">
+                    <span class="todo-icon">&#x2610;</span>
+                    <span class="text">Run 1 km</span>
+                </div>
+                <span class="delete-btn">&times;</span>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
