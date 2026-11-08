@@ -1,0 +1,9 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.image-box float right {
+    float: right;
+    margin: 10px;
+}
