@@ -3,7 +3,15 @@ body {
     padding: 0;
 }
 
-.image-box float right {
+.image-box {
     float: right;
     margin: 10px;
+}
+
+.box {
+    width: 300px;
+    height: 200px;
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
 }
