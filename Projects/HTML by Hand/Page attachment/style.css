@@ -1,16 +1,15 @@
-.container {
-    width: 800px;
-    margin: 20px;
-    padding: 20px;
-    font-size: 0;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-
-.img-right {
+.img-box {
     float: right;
-    margin: 15px;
-    margin-bottom: 15px;
-    height: 100%;
-    border: 1px solid #ccc;
     width: 100%;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    padding: 5px;
+    width: 200px;
+    height: 200px;
 }
