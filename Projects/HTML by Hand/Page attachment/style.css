@@ -5,11 +5,18 @@
 }
 
 .img-box {
-    float: right;
     width: 100%;
     border: 1px solid #ccc;
     margin-bottom: 5px;
     padding: 5px;
     width: 200px;
     height: 200px;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
 }
