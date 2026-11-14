@@ -1,0 +1,72 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+header.box {
+    position: relative;
+    background-color: transparent;
+    height: 300px;
+    width: 300px;
+    margin: 40px;
+}
+
+.sub-box {
+    position: absolute;
+}
+
+/* 1. Червоний прямокутник зверху зліва */
+.red-top {
+    background-color: #ea4335;
+    width: 120px;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+}
+
+/* 2. Зелений квадрат зверху справа */
+.green-top-right {
+    background-color: #34a853;
+    width: 100px;
+    height: 100px;
+    top: 0px;
+    left: 120px;
+}
+
+/* 3. Зелений квадрат зліва зверху */
+.green-bottom-left {
+    background-color: #34a853;
+    width: 100px;
+    height: 100px;
+    top: 100px;
+    left: 0px;
+}
+
+/* 4. Жовтий квадрат по центру */
+.yellow-middle-right {
+    background-color: #fbbc05;
+    width: 100px;
+    height: 100px;
+    top: 100px;
+    left: 120px;
+}
+
+/* 5. Жовтий квадрат зліва знизу */
+.yellow-bottom-left {
+    background-color: #fbbc05;
+    width: 100px;
+    height: 150px;
+    top: 200px;
+    left: 0px;
+}
+
+/* 6. Синій прямокутник внизу справа */
+.blue-bottom {
+    background-color: #1a73e8;
+    width: 150px;
+    height: 50px;
+    top: 200px;
+    left: 120px;
+}
